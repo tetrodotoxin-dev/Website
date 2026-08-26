@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found · Tetrodotoxin"
+  description="The requested Tetrodotoxin page could not be found."
+>
+  <main id="main" class="simple-page">
+    <div class="container">
+      <section class="not-found">
+        <span>404</span>
+        <h1>This path has no owner.</h1>
+        <p>
+          The page may have moved, or the route may not exist yet. The
+          documentation is the best place to continue.
+        </p>
+        <a class="button button-primary" href="/docs/">
+          Return to the docs
+          <span aria-hidden="true">→</span>
+        </a>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

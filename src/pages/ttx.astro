@@ -1,0 +1,307 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+
+const dialects = [
+  {
+    label: 'Composition',
+    title: 'Package',
+    copy: 'Connects source-local imports, exact Package dependencies, embedded resources, Archives, and publication routes.',
+  },
+  {
+    label: 'Execution',
+    title: 'Library',
+    copy: 'Owns Types, values, Functions, data flow, and reusable execution hosted directly or inside another Dialect.',
+  },
+  {
+    label: 'Application',
+    title: 'App',
+    copy: 'Selects runtime policy and connects authored Scene lifecycle to the completed product.',
+  },
+  {
+    label: 'Lifecycle',
+    title: 'Scene',
+    copy: 'Owns state, Signals, preparation, updates, release, and one hosted Library layer.',
+  },
+  {
+    label: 'Contract',
+    title: 'Render',
+    copy: 'States GPU stages, resources, locations, and behavior without becoming a Shader implementation.',
+  },
+  {
+    label: 'GPU program',
+    title: 'Shader',
+    copy: 'Owns resources, Programs, and one hosted Library layer for vertex and fragment execution.',
+  },
+];
+---
+
+<BaseLayout
+  title="TTX · A family of composable Dialects"
+  description="TTX is Tetrodotoxin's integrated family of Package, Library, App, Scene, Render, and Shader Dialects."
+>
+  <main id="main">
+    <section class="hero ttx-hero">
+      <div class="container hero-content">
+        <div class="hero-heading">
+          <p class="eyebrow">One implementation on Tetrodotoxin</p>
+          <h1>
+            <span>A family of languages.</span>
+            <span class="hero-title-accent">Built to compose.</span>
+          </h1>
+        </div>
+
+        <div class="hero-support">
+          <div class="hero-copy">
+            <p class="hero-summary">
+              TTX is Tetrodotoxin's first integrated language family. Package,
+              Library, App, Scene, Render, and Shader share a semi-common Lexicon
+              and common graph contracts while keeping the semantics that make
+              each Dialect useful.
+            </p>
+            <div class="button-row">
+              <a class="button button-primary" href="#scene-lifetime">
+                Scene Lifetime
+                <span aria-hidden="true">↓</span>
+              </a>
+              <a class="button button-secondary" href={SITE.ttxExamples}>
+                TTX examples
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="ttx-family-map" aria-label="Package, Library, App, Scene, Render, and Shader share a semi-common Lexicon and join a Tetrodotoxin Workspace">
+            <p>TTX language family</p>
+            <div class="ttx-dialect-cloud">
+              <span>Package</span>
+              <span>Library</span>
+              <span>App</span>
+              <span>Scene</span>
+              <span>Render</span>
+              <span>Shader</span>
+            </div>
+            <div class="ttx-lexicon">
+              <small>Semi-common Lexicon</small>
+              <strong>Tokens · Definitions · Packs · Layouts · Routes</strong>
+            </div>
+            <div class="ttx-family-arrow" aria-hidden="true">↓</div>
+            <div class="ttx-platform-band">
+              <small>Tetrodotoxin platform</small>
+              <strong>Semantic Workspace + Terminal boundary</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-bordered">
+      <div class="container section-heading">
+        <p class="eyebrow">Keep the boundary clear</p>
+        <h2>A language family, not the platform itself.</h2>
+        <p>
+          Tetrodotoxin supplies the extension model, Workspace lifetime,
+          semantic graph, and Terminal boundary. TTX is one cohesive set of
+          language choices built on that foundation.
+        </p>
+      </div>
+
+      <div class="container identity-split">
+        <article>
+          <span>Platform</span>
+          <h3>Tetrodotoxin</h3>
+          <p>
+            Installs Dialects, retains their real identities in a Workspace,
+            coordinates completion, and gives producers one boundary where
+            finished products can leave the graph.
+          </p>
+        </article>
+        <article>
+          <span>Language family</span>
+          <h3>TTX</h3>
+          <p>
+            Chooses a related Lexicon and supplies cooperating Dialects for
+            Packages, reusable execution, applications, scenes, render
+            contracts, and shaders.
+          </p>
+        </article>
+      </div>
+
+      <div class="container future-language">
+        <span>Why the distinction matters</span>
+        <p>
+          A C frontend can participate in Tetrodotoxin's Workspace, Packages,
+          shared graph contracts, and Terminals without becoming a TTX Dialect
+          or adopting TTX source. Another family can make the same choice.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split-heading ttx-dialect-heading">
+        <div>
+          <p class="eyebrow">Semi-common, not normalized</p>
+          <h2 class="ttx-lexicon-title">
+            <span>One Lexicon.</span>
+            <span>Several semantic owners.</span>
+          </h2>
+        </div>
+        <p>
+          Shared spellings make the family readable as one system. Each Dialect
+          still owns its grammar, completion rules, semantic identities, and
+          persistent meaning.
+        </p>
+      </div>
+
+      <div class="container dialect-grid">
+        {
+          dialects.map((dialect) => (
+            <article class="dialect-card">
+              <span>{dialect.label}</span>
+              <h3>{dialect.title}</h3>
+              <p>{dialect.copy}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="scene-lifetime" class="section section-bordered">
+      <div class="container split-heading scene-heading">
+        <div>
+          <p class="eyebrow">One application, several Dialects</p>
+          <h2>Scene Lifetime becomes one semantic graph.</h2>
+        </div>
+        <p>
+          The authored files keep their own language. Source Aliases, Package
+          requests, resources, and hosted Library layers connect their real
+          identities before any backend chooses a representation.
+        </p>
+      </div>
+
+      <div class="container source-sample">
+        <div>
+          <span>main.ttx · App Dialect</span>
+          <p>
+            The App names its Scene sources and declares lifecycle transitions
+            between their Signals.
+          </p>
+        </div>
+        <pre><code>dialect : App;
+
+public Splash : alias = source("scenes/splash.ttx");
+public Title  : alias = source("scenes/title.ttx");
+
+lifecycle = Scene &lbrace;
+  initial Splash;
+  on Splash.finished replace Title;
+&rbrace;</code></pre>
+      </div>
+
+      <div class="container scene-graph-diagram">
+        <div class="scene-graph-column">
+          <p>Authored representation</p>
+          <div class="scene-node">
+            <small>Package Dialect</small>
+            <strong>package.ttx</strong>
+            <span>MainSource route</span>
+          </div>
+          <div class="scene-node">
+            <small>App Dialect</small>
+            <strong>main.ttx</strong>
+            <span>Window + Scene lifecycle</span>
+          </div>
+          <div class="scene-node">
+            <small>Scene Dialects</small>
+            <strong>splash.ttx + title.ttx</strong>
+            <span>State + Signals + Library behavior</span>
+          </div>
+          <div class="scene-node">
+            <small>Shader Dialect</small>
+            <strong>blend.ttx</strong>
+            <span>Render contract + Library stages</span>
+          </div>
+          <div class="scene-node">
+            <small>Package resources</small>
+            <strong>icon + logo + noise</strong>
+            <span>Retained image bytes</span>
+          </div>
+        </div>
+
+        <div class="scene-graph-arrow" aria-hidden="true">→</div>
+
+        <div class="scene-semantic-graph">
+          <small>Completed Workspace</small>
+          <strong>Tetrodotoxin.SceneLifetime</strong>
+          <div class="semantic-layer">
+            <span>Package root</span>
+            <span>App Main</span>
+          </div>
+          <div class="semantic-layer">
+            <span>Scene Splash + Library</span>
+            <span>Scene Title + Library</span>
+          </div>
+          <div class="semantic-layer">
+            <span>Shader Blend + Library</span>
+            <span>Render TexturedQuad2D</span>
+          </div>
+          <div class="semantic-layer semantic-dependencies">
+            <span>Graphics</span>
+            <span>System</span>
+            <span>Math</span>
+            <span>Resources</span>
+          </div>
+        </div>
+
+        <div class="scene-graph-arrow" aria-hidden="true">→</div>
+
+        <div class="scene-graph-column scene-consumers">
+          <p>Consumers and products</p>
+          <div class="scene-node">
+            <small>ABI + LLVM</small>
+            <strong>CPU objects</strong>
+            <span>Scene and Library execution</span>
+          </div>
+          <div class="scene-node">
+            <small>Graphics + Vulkan</small>
+            <strong>SPIR-V + pipeline</strong>
+            <span>Shader, Render, and resource meaning</span>
+          </div>
+          <div class="scene-node">
+            <small>Package</small>
+            <strong>Complete + Contract Archives</strong>
+            <span>Source-free semantic reconstruction</span>
+          </div>
+          <div class="scene-node">
+            <small>Application + Linker</small>
+            <strong>Native Scene Lifetime app</strong>
+            <span>Entry policy + linked products</span>
+          </div>
+          <div class="scene-node">
+            <small>Puffer</small>
+            <strong>Editor + build experience</strong>
+            <span>One live view of the same graph</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container callout">
+        <div>
+          <p class="eyebrow">The family can keep growing</p>
+          <h2>Add a Dialect without building another island.</h2>
+          <p>
+            A new TTX Dialect can adopt the shared Lexicon where it is useful,
+            retain the domain meaning that is not, and participate in the same
+            Packages, Workspace, tools, and Terminal products.
+          </p>
+        </div>
+        <a class="button button-primary" href="/docs/core-concepts/">
+          Read the platform model
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

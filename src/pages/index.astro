@@ -1,0 +1,292 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+
+const principles = [
+  {
+    number: '01',
+    title: 'Speak in the domain',
+    copy: 'Packages, scenes, shaders, and application logic keep the concepts that make each language useful.',
+  },
+  {
+    number: '02',
+    title: 'Share the real identity',
+    copy: 'Editors, compilers, and build tools meet the same semantic objects instead of synchronizing copies.',
+  },
+  {
+    number: '03',
+    title: 'Choose the product',
+    copy: 'Native code, GPU modules, archives, and tooling views emerge only when a Terminal needs them.',
+  },
+];
+
+const surfaces = [
+  {
+    label: 'Language',
+    title: 'Skip the one-off toolchain',
+    copy: 'A DSL keeps its own grammar and semantic model while reusing source handling, diagnostics, Packages, editor sessions, and compilation infrastructure.',
+  },
+  {
+    label: 'Graph',
+    title: 'Compose semantics out of the box',
+    copy: 'Source imports, Package dependencies, embedded resources, and cross-language relationships meet in one completed graph instead of another linker and symbol model.',
+  },
+  {
+    label: 'Products',
+    title: 'Add the Terminal you need',
+    copy: 'Select the product formats a build needs or extend the output side without pushing target representation into every source language.',
+  },
+];
+---
+
+<BaseLayout
+  title={SITE.title}
+  description="Purpose-built languages sharing one semantic workspace and one complete toolchain."
+>
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-heading">
+          <p class="eyebrow">A language platform for whole products</p>
+          <h1>
+            <span>Purpose-built languages.</span>
+            <span class="hero-title-accent">One connected toolchain.</span>
+          </h1>
+        </div>
+
+        <div class="hero-support">
+          <div class="hero-copy">
+            <p class="hero-summary">
+              Tetrodotoxin lets every domain keep the meaning that makes it useful
+              while taking part in one semantic Workspace, one Package graph, and
+              one toolchain.
+            </p>
+            <div class="button-row">
+              <a class="button button-primary" href="/docs/">
+                Explore the docs
+                <span aria-hidden="true">→</span>
+              </a>
+              <a class="button button-secondary" href={SITE.github}>
+                View on GitHub
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="system-map" aria-label="Dialects join one semantic Workspace, which feeds independent Terminals">
+            <img src="/brand/logo.svg" alt="Tetrodotoxin Toolchain" />
+            <div class="map-dialects" aria-label="Example Dialects">
+              <span>Package</span>
+              <span>Library</span>
+              <span>Scene</span>
+              <span>Shader</span>
+            </div>
+            <div class="map-connector" aria-hidden="true"></div>
+            <div class="map-workspace">
+              <small>Shared meaning</small>
+              <strong>Semantic Workspace</strong>
+              <span>Identity · TTX · Documentation</span>
+            </div>
+            <div class="map-connector" aria-hidden="true"></div>
+            <div class="map-terminals" aria-label="Example Terminal products">
+              <span>Native</span>
+              <span>SPIR-V</span>
+              <span>Archive</span>
+              <span>Format</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-bordered">
+      <div class="container section-heading">
+        <p class="eyebrow">The central idea</p>
+        <h2>Specialization without fragmentation.</h2>
+        <p>
+          A domain should not have to choose between a generic data file and an
+          isolated toolchain. Tetrodotoxin connects concrete languages through
+          the meaning they genuinely share.
+        </p>
+      </div>
+
+      <div class="container principle-grid">
+        {
+          principles.map((principle) => (
+            <article class="principle-card">
+              <span>{principle.number}</span>
+              <h3>{principle.title}</h3>
+              <p>{principle.copy}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split-heading extension-heading">
+        <div>
+          <p class="eyebrow">Extension without reinvention</p>
+          <h2 class="extension-title">
+            <span>Bring a language.</span>
+            <span>Reuse the toolchain.</span>
+          </h2>
+        </div>
+        <p>
+          Dialects add source meaning, Terminals add products, and the completed
+          Workspace gives both sides one semantic graph to build on.
+        </p>
+      </div>
+
+      <div class="container surface-grid">
+        {
+          surfaces.map((surface) => (
+            <article class="surface-card">
+              <span>{surface.label}</span>
+              <h3>{surface.title}</h3>
+              <p>{surface.copy}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="integration" class="section section-bordered">
+      <div class="container split-heading integration-heading">
+        <div>
+          <p class="eyebrow">Bring your own toolchain</p>
+          <h2>One graph between your inputs and outputs.</h2>
+        </div>
+        <p>
+          Tetrodotoxin can sit between the tools that understand your inputs and
+          the producers that create your products. Neither side has to become a
+          compiler frontend or native code generator to participate.
+        </p>
+      </div>
+
+      <div
+        class="container pipeline-diagram"
+        aria-label="Library, Shader, PNG, and custom Dialects join one semantic Workspace and feed native, graphics, archive, and custom Terminal products"
+      >
+        <div class="pipeline-stage pipeline-inputs">
+          <p>Inputs</p>
+          <div class="pipeline-node">
+            <small>TTX Library Dialect</small>
+            <strong>Library Source</strong>
+          </div>
+          <div class="pipeline-node">
+            <small>TTX Shader Dialect</small>
+            <strong>Shader Source</strong>
+          </div>
+          <div class="pipeline-node">
+            <small>PNG Dialect</small>
+            <strong>Images + embedded data</strong>
+          </div>
+          <div class="pipeline-node">
+            <small>Your Dialect</small>
+            <strong>Custom text or bytes</strong>
+          </div>
+        </div>
+
+        <div class="pipeline-arrow" aria-hidden="true">→</div>
+
+        <div class="pipeline-core">
+          <small>Toolchain + Environment</small>
+          <strong>Completed semantic Workspace</strong>
+          <span>Types · References · Resources · Interfaces</span>
+        </div>
+
+        <div class="pipeline-arrow" aria-hidden="true">→</div>
+
+        <div class="pipeline-stage pipeline-outputs">
+          <p>Terminal products</p>
+          <div class="pipeline-node">
+            <small>ABI + LLVM</small>
+            <strong>C interface + CPU objects</strong>
+          </div>
+          <div class="pipeline-node">
+            <small>Vulkan</small>
+            <strong>SPIR-V + pipeline description</strong>
+          </div>
+          <div class="pipeline-node">
+            <small>Package</small>
+            <strong>Semantic Archive</strong>
+          </div>
+          <div class="pipeline-node">
+            <small>Custom Terminal</small>
+            <strong>Image, data, or another format</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="container integration-points">
+        <article>
+          <small>Frontend</small>
+          <span>Unbounded inputs</span>
+          <p>
+            Inputs do not need to be source files. Interpret a language,
+            arbitrary text, embedded files, images, or any other input that can
+            contribute meaning to the graph.
+          </p>
+        </article>
+        <article>
+          <small>Middleware</small>
+          <span>Codegen-free tooling interop</span>
+          <p>
+            Join compilers, graphics pipelines, editors, package managers, and other
+            toolchains through one graph without routing every integration
+            through native code generation.
+          </p>
+        </article>
+        <article>
+          <small>Backend</small>
+          <span>Outputs beyond programs</span>
+          <p>
+            Generate images, data files, reports, archives, or any other format
+            a Terminal can derive without teaching every Dialect about that
+            representation.
+          </p>
+        </article>
+      </div>
+
+      <div class="container ecosystem-panel">
+        <div>
+          <p class="eyebrow">The LLVM ecosystem comes with you</p>
+          <h3>Existing toolchains remain first-class consumers.</h3>
+          <p>
+            The native path projects a C-compatible ABI, emits LLVM IR and
+            objects, links with LLD, and carries source correlation into LLDB.
+            Bazel can wrap the same Puffer build request. In parallel, Vulkan
+            derives SPIR-V and its CPU pipeline description from the completed
+            Shader, Render, and Library graph without passing through LLVM.
+          </p>
+        </div>
+        <div class="ecosystem-tools" aria-label="Existing toolchain integrations">
+          <span>C ABI</span>
+          <span>LLVM</span>
+          <span>LLD</span>
+          <span>LLDB</span>
+          <span>Bazel</span>
+          <span>Vulkan + SPIR-V</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container callout">
+        <div>
+          <p class="eyebrow">Start with the why</p>
+          <h2>See how the pieces fit together.</h2>
+          <p>
+            The documentation begins with the problem Tetrodotoxin solves, then
+            introduces the model and the vocabulary behind it.
+          </p>
+        </div>
+        <a class="button button-primary" href="/docs/core-concepts/">
+          Read the core concepts
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

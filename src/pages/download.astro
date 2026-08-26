@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+---
+
+<BaseLayout
+  title="Download Tetrodotoxin"
+  description="Tetrodotoxin releases will be published through the project GitHub repository."
+>
+  <main id="main" class="simple-page">
+    <div class="container">
+      <section class="release-panel">
+        <div class="release-icon">
+          <img src="/brand/icon.svg" alt="" />
+        </div>
+        <p class="eyebrow">Downloads</p>
+        <h1>Releases will live on GitHub.</h1>
+        <p class="release-summary">
+          Tetrodotoxin does not have a public release yet. When the first build
+          is ready, release notes and downloadable artifacts will appear on the
+          project’s GitHub Releases page.
+        </p>
+        <div class="button-row release-actions">
+          <a class="button button-primary" href={SITE.releases}>
+            View GitHub releases
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="button button-secondary" href={SITE.github}>
+            Browse the source
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

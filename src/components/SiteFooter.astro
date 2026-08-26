@@ -1,0 +1,28 @@
+---
+import { SITE } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <img src="/brand/icon.svg" alt="" />
+      <div>
+        <strong>{SITE.name}</strong>
+        <span>The common layer is meaning, not representation.</span>
+      </div>
+    </div>
+
+    <nav aria-label="Footer navigation">
+      <a href="/docs/">Documentation</a>
+      <a href="/ttx/">TTX</a>
+      <a href="/puffer/">Puffer</a>
+      <a href="/download/">Download</a>
+      <a href={SITE.organization}>GitHub organization</a>
+    </nav>
+  </div>
+
+  <div class="container footer-meta">
+    <span>Copyright © 2023-present Matt Kaes and contributors</span>
+    <span>{SITE.domain}</span>
+  </div>
+</footer>
