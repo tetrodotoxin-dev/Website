@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../data/site';
+import { primaryNavigation, SITE } from '../data/site';
 ---
 
 <footer class="site-footer">
@@ -13,10 +13,7 @@ import { SITE } from '../data/site';
     </div>
 
     <nav aria-label="Footer navigation">
-      <a href="/docs/">Documentation</a>
-      <a href="/ttx/">TTX</a>
-      <a href="/puffer/">Puffer</a>
-      <a href="/download/">Download</a>
+      {primaryNavigation.map((item) => <a href={item.href}>{item.label}</a>)}
       <a href={SITE.organization}>GitHub organization</a>
     </nav>
   </div>

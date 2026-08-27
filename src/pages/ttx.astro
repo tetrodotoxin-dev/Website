@@ -60,13 +60,11 @@ const dialects = [
               each Dialect useful for its targeted domain.
             </p>
             <div class="button-row">
-              <a class="button button-primary" href="#scene-lifetime">
-                Scene Lifetime
-                <span aria-hidden="true">↓</span>
+              <a class="button button-primary" href="#multiple-scenes">
+                Multiple Scenes
               </a>
               <a class="button button-secondary" href={SITE.ttxExamples}>
                 TTX examples
-                <span aria-hidden="true">↗</span>
               </a>
             </div>
           </div>
@@ -140,8 +138,8 @@ const dialects = [
           </h2>
         </div>
         <p>
-          Shared spellings make the family readable as one system while each Dialect
-          still gets to owns its grammar, completion rules, semantic identities, and
+          Shared spellings make the family readable as one system, while each Dialect
+          still owns its grammar, completion rules, semantic identities, and
           persistent meaning.
         </p>
       </div>
@@ -159,141 +157,184 @@ const dialects = [
       </div>
     </section>
 
-    <section id="scene-lifetime" class="section section-bordered">
+    <section id="multiple-scenes" class="section section-bordered">
       <div class="container split-heading scene-heading">
         <div>
-          <p class="subheader">One application, several Dialects</p>
-          <h2>Scene Lifetime becomes one semantic graph.</h2>
+          <p class="subheader">A small App with room to grow</p>
+          <h2 class="two-tone-title">
+            <span>Keep Scenes focused</span>
+            <span>Let App connect them</span>
+          </h2>
         </div>
         <p>
-          The authored files keep their own language. Source Aliases, Package
-          requests, resources, and hosted Library layers connect their real
-          identities before any backend chooses a representation.
+          Imagine adding Settings without teaching Home how Settings works. Home
+          publishes open_settings, Settings publishes done, and App turns those
+          moments into a journey. Each Scene stays free to grow on its own.
         </p>
       </div>
 
       <div class="container source-sample">
         <div>
-          <span>main.ttx · App Dialect</span>
+          <span>Multiple Scenes · App example</span>
           <p>
-            The App names its Scene sources and declares lifecycle transitions
-            between their Signals.
+            Opening Settings keeps Home ready underneath it. When Settings is
+            done, App reveals Home again. Menus, editors, games, and tools can
+            all grow from the same small pattern.
           </p>
+          <a class="button button-secondary" href={SITE.appGuide}>
+            Explore the App guide
+          </a>
         </div>
-        <pre><code>dialect : App;
+        <pre class="ttx-code" aria-label="Multiple Scenes App source"><code><span data-token="comment">// Chooses how people move between Home and Settings.</span>
+<span data-token="keyword">dialect</span> <span data-token="accessor">:</span> <span data-token="type">App</span><span data-token="punctuation">;</span>
 
-public Splash : alias = source("scenes/splash.ttx");
-public Title  : alias = source("scenes/title.ttx");
+<span data-token="visibility">public</span> <span data-token="type">Home</span> <span data-token="accessor">:</span> <span data-token="keyword">alias</span> <span data-token="operator">=</span> <span data-token="keyword">source</span><span data-token="punctuation">(</span><span data-token="string">"home.ttx"</span><span data-token="punctuation">)</span><span data-token="punctuation">;</span>
+<span data-token="visibility">public</span> <span data-token="type">Settings</span> <span data-token="accessor">:</span> <span data-token="keyword">alias</span> <span data-token="operator">=</span> <span data-token="keyword">source</span><span data-token="punctuation">(</span><span data-token="string">"settings.ttx"</span><span data-token="punctuation">)</span><span data-token="punctuation">;</span>
 
-lifecycle = Scene &lbrace;
-  initial Splash;
-  on Splash.finished replace Title;
-&rbrace;</code></pre>
+<span data-token="keyword">runtime</span> <span data-token="operator">=</span> <span data-token="type">Windowed</span> <span data-token="punctuation">&lbrace;</span>
+  <span data-token="accessor">.</span><span data-token="property">title</span> <span data-token="operator">=</span> <span data-token="string">"Multiple Scenes"</span><span data-token="punctuation">,</span>
+<span data-token="punctuation">&rbrace;</span>
+
+<span data-token="keyword">lifecycle</span> <span data-token="operator">=</span> <span data-token="type">Scene</span> <span data-token="punctuation">&lbrace;</span>
+  <span data-token="keyword">initial</span> <span data-token="type">Home</span><span data-token="punctuation">;</span>
+  <span data-token="keyword">on</span> <span data-token="type">Home</span><span data-token="accessor">.</span><span data-token="property">open_settings</span> <span data-token="keyword">push</span> <span data-token="type">Settings</span><span data-token="punctuation">;</span>
+  <span data-token="keyword">on</span> <span data-token="type">Settings</span><span data-token="accessor">.</span><span data-token="property">done</span> <span data-token="keyword">pop</span><span data-token="punctuation">;</span>
+<span data-token="punctuation">&rbrace;</span></code></pre>
       </div>
 
-      <div class="container scene-graph-diagram">
+      <div class="container source-sample source-sample-secondary">
+        <div>
+          <span>Settings · Scene example</span>
+          <p>
+            Press Escape and Settings says only that it is done. It never needs
+            to know whether App will reveal Home, open something else, or exit.
+            That choice stays open wherever the Scene is used.
+          </p>
+          <a class="button button-secondary" href={SITE.sceneGuide}>
+            Explore the Scene guide
+          </a>
+        </div>
+        <pre class="ttx-code" aria-label="Settings Scene source"><code><span data-token="comment">// Closes this Scene when Escape is pressed.</span>
+<span data-token="keyword">dialect</span> <span data-token="accessor">:</span> <span data-token="type">Scene</span><span data-token="punctuation">;</span>
+
+<span data-token="visibility">public</span> <span data-token="type">System</span> <span data-token="accessor">:</span> <span data-token="keyword">alias</span> <span data-token="operator">=</span>
+    <span data-token="keyword">package</span><span data-token="punctuation">(</span><span data-token="accessor">.</span><span data-token="property">name</span> <span data-token="operator">=</span> <span data-token="string">"Perimortem.System"</span><span data-token="punctuation">,</span> <span data-token="accessor">.</span><span data-token="property">version</span> <span data-token="operator">=</span> <span data-token="string">"1.0"</span><span data-token="punctuation">)</span><span data-token="punctuation">;</span>
+<span data-token="keyword">using</span> <span data-token="type">System</span><span data-token="accessor">::</span><span data-token="type">Key</span><span data-token="punctuation">;</span>
+
+<span data-token="keyword">signal</span> <span data-token="property">done</span><span data-token="punctuation">;</span>
+
+<span data-token="type">Scene</span> <span data-token="keyword">prepare</span><span data-token="punctuation">[</span><span data-token="keyword">self</span><span data-token="punctuation">]</span> <span data-token="accessor">-&gt;</span> <span data-token="punctuation">[]</span> <span data-token="accessor">:</span> <span data-token="control">return</span><span data-token="punctuation">;</span>
+
+<span data-token="type">Scene</span> <span data-token="keyword">update</span><span data-token="punctuation">[</span><span data-token="keyword">self</span><span data-token="punctuation">,</span> <span data-token="accessor">.</span><span data-token="property">delta_time</span> <span data-token="accessor">:</span> <span data-token="intrinsic">R64</span><span data-token="punctuation">]</span> <span data-token="accessor">-&gt;</span> <span data-token="punctuation">[]</span> <span data-token="punctuation">&lbrace;</span>
+  <span data-token="policy">state</span> input <span data-token="operator">:=</span> <span data-token="type">System</span><span data-token="accessor">::</span><span data-token="type">Input</span> <span data-token="accessor">-&gt;</span> <span data-token="function">snapshot</span><span data-token="punctuation">()</span><span data-token="punctuation">;</span>
+  <span data-token="control">if</span> input <span data-token="accessor">-&gt;</span> <span data-token="function">pressed</span><span data-token="punctuation">(</span><span data-token="accessor">.</span><span data-token="property">key</span> <span data-token="operator">=</span> escape<span data-token="punctuation">)</span> <span data-token="accessor">:</span> <span data-token="keyword">emit</span> <span data-token="property">done</span><span data-token="punctuation">;</span>
+<span data-token="punctuation">&rbrace;</span>
+
+<span data-token="type">Scene</span> <span data-token="keyword">release</span><span data-token="punctuation">[</span><span data-token="keyword">self</span><span data-token="punctuation">]</span> <span data-token="accessor">-&gt;</span> <span data-token="punctuation">[]</span> <span data-token="accessor">:</span> <span data-token="control">return</span><span data-token="punctuation">;</span></code></pre>
+      </div>
+
+      <div
+        class="container scene-graph-diagram"
+        aria-label="Package, App, Home Scene, and Settings Scene join one Workspace that feeds editor, Archive, and native application products"
+      >
         <div class="scene-graph-column">
-          <p>Authored representation</p>
+          <p>Sources</p>
           <div class="scene-node">
             <small>Package Dialect</small>
             <strong>package.ttx</strong>
-            <span>MainSource route</span>
+            <span>Publishes the App</span>
           </div>
           <div class="scene-node">
             <small>App Dialect</small>
-            <strong>main.ttx</strong>
-            <span>Window + Scene lifecycle</span>
+            <strong>app.ttx</strong>
+            <span>Window + navigation</span>
           </div>
           <div class="scene-node">
-            <small>Scene Dialects</small>
-            <strong>splash.ttx + title.ttx</strong>
-            <span>State + Signals + Library behavior</span>
+            <small>Scene Dialect</small>
+            <strong>home.ttx</strong>
+            <span>Home state + open_settings</span>
           </div>
           <div class="scene-node">
-            <small>Shader Dialect</small>
-            <strong>blend.ttx</strong>
-            <span>Render contract + Library stages</span>
-          </div>
-          <div class="scene-node">
-            <small>Package resources</small>
-            <strong>icon + logo + noise</strong>
-            <span>Retained image bytes</span>
+            <small>Scene Dialect</small>
+            <strong>settings.ttx</strong>
+            <span>Settings state + done</span>
           </div>
         </div>
 
         <div class="scene-graph-arrow" aria-hidden="true">→</div>
 
         <div class="scene-semantic-graph">
-          <small>Completed Workspace</small>
-          <strong>Tetrodotoxin.SceneLifetime</strong>
+          <small>Shared Workspace</small>
+          <strong>Multiple Scenes</strong>
           <div class="semantic-layer">
             <span>Package root</span>
-            <span>App Main</span>
+            <span>App Entry</span>
           </div>
           <div class="semantic-layer">
-            <span>Scene Splash + Library</span>
-            <span>Scene Title + Library</span>
+            <span>Scene + Library</span>
+            <span>Scene + Library</span>
           </div>
           <div class="semantic-layer">
-            <span>Shader Blend + Library</span>
-            <span>Render TexturedQuad2D</span>
+            <span>System ABI</span>
+            <span>Signal Propagation</span>
           </div>
-          <div class="semantic-layer semantic-dependencies">
-            <span>Graphics</span>
-            <span>System</span>
-            <span>Math</span>
-            <span>Resources</span>
+          <div class="semantic-layer">
+            <span>Lifecycle</span>
+            <span>Lexical Anchors</span>
           </div>
         </div>
 
         <div class="scene-graph-arrow" aria-hidden="true">→</div>
 
         <div class="scene-graph-column scene-consumers">
-          <p>Consumers and products</p>
+          <p>Ready for</p>
           <div class="scene-node">
-            <small>ABI + LLVM</small>
-            <strong>CPU objects</strong>
-            <span>Scene and Library execution</span>
-          </div>
-          <div class="scene-node">
-            <small>Graphics + Vulkan</small>
-            <strong>SPIR-V + pipeline</strong>
-            <span>Shader, Render, and resource meaning</span>
+            <small>Puffer</small>
+            <strong>Live editing</strong>
+            <span>Every source in context</span>
           </div>
           <div class="scene-node">
             <small>Package</small>
-            <strong>Complete + Contract Archives</strong>
-            <span>Source-free semantic reconstruction</span>
+            <strong>Semantic Archive</strong>
+            <span>The connected Package graph</span>
           </div>
           <div class="scene-node">
             <small>Application + Linker</small>
-            <strong>Native Scene Lifetime app</strong>
-            <span>Entry policy + linked products</span>
-          </div>
-          <div class="scene-node">
-            <small>Puffer</small>
-            <strong>Editor + build experience</strong>
-            <span>One live view of the same graph</span>
+            <strong>Native application</strong>
+            <span>The experience people run</span>
           </div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="container callout">
-        <div>
-          <p class="subheader">The family can keep growing</p>
-          <h2>Add a Dialect without building another island.</h2>
+      <div class="container callout ttx-callout">
+        <div class="ttx-callout-copy">
+          <p class="subheader">The graph is larger than TTX</p>
+          <h2 class="two-tone-title">
+            <span>Grow the TTX family</span>
+            <span>Bring another language</span>
+          </h2>
           <p>
-            A new TTX Dialect can adopt the shared Lexicon where it is useful,
-            retain the domain meaning that is not, and participate in the same
-            Packages, Workspace, tools, and Terminal products.
+            Some domains fit naturally inside TTX. A new Dialect can share the
+            family's Lexicon, Packages, and tooling while giving its users a
+            source language shaped around their work.
+          </p>
+          <p>
+            Other languages arrive with a history worth keeping. C is the first
+            frontend we want to welcome beyond TTX, keeping its preprocessor,
+            translation units, pointers, and ABI while joining the same
+            Workspace, Package graph, editor, and Terminals.
           </p>
         </div>
-        <a class="button button-primary" href="/docs/core-concepts/">
-          Read the platform model
-          <span aria-hidden="true">→</span>
-        </a>
+        <div class="callout-actions">
+          <a class="button button-primary" href={SITE.languageGuide}>
+            Build a TTX Dialect
+          </a>
+          <a class="button button-secondary" href={SITE.contributing}>
+            Bring another frontend
+          </a>
+        </div>
       </div>
     </section>
   </main>

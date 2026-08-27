@@ -5,7 +5,6 @@ import {
   isReferenceType,
   packageReferenceHref,
   referencePackages,
-  sourceAnchor,
   typeReferenceHref,
 } from '../data/reference';
 
@@ -51,6 +50,9 @@ const activeDocument = referencePackages.find((document) => document.package.nam
             referencePackages.map((document) => {
               const packageHref = packageReferenceHref(document.package.name);
               const expanded = activeDocument === document;
+              const types = document.sources.flatMap((source) =>
+                document.nodes.filter((node) => node.source === source.id && isReferenceType(node)),
+              );
               return (
                 <div class:list={['reference-package-branch', { 'reference-package-active': expanded }]}>
                   <a
@@ -60,27 +62,14 @@ const activeDocument = referencePackages.find((document) => document.package.nam
                   >
                     {document.package.name.replace('Perimortem.', '')}
                   </a>
-                  {expanded && (
-                    <div class="reference-package-tree">
-                      {document.sources.map((source) => {
-                        const types = document.nodes.filter(
-                          (node) => node.source === source.id && isReferenceType(node),
-                        );
-                        if (types.length === 0) return null;
+                  {expanded && types.length > 0 && (
+                    <div class="reference-package-tree reference-package-types">
+                      {types.map((node) => {
+                        const href = typeReferenceHref(document, node);
                         return (
-                          <section class="reference-package-source">
-                            <a href={`${packageHref}#${sourceAnchor(source.id)}`}>{source.path}</a>
-                            <div class="reference-package-types">
-                              {types.map((node) => {
-                                const href = typeReferenceHref(document, node);
-                                return (
-                                  <a href={href} aria-current={pathname === href ? 'page' : undefined}>
-                                    {node.name}
-                                  </a>
-                                );
-                              })}
-                            </div>
-                          </section>
+                          <a href={href} aria-current={pathname === href ? 'page' : undefined}>
+                            {node.name}
+                          </a>
                         );
                       })}
                     </div>

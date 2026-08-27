@@ -5,18 +5,18 @@ import { SITE } from '../data/site';
 const capabilities = [
   {
     label: 'Editor',
-    title: 'One live language server',
-    copy: 'Diagnostics, hover, navigation, completion, semantic highlighting, and formatting ask the same Workspace that understands the build.',
+    title: 'Explore the real graph',
+    copy: 'Hover, navigation, completion, highlighting, and formatting follow the identities and documentation the Dialect already created.',
   },
   {
-    label: 'Build',
-    title: 'One compiler front door',
-    copy: 'A Package request resolves sources and dependencies, selects Terminals and Linker products, and publishes the complete result transactionally.',
+    label: 'Products',
+    title: 'Choose what the build needs',
+    copy: 'Ask for native code, GPU modules, Archives, or another Terminal product when the completed Package is ready to produce it.',
   },
   {
     label: 'Sessions',
-    title: 'One Workspace host',
-    copy: 'Command line, editor, and build-system requests share the same language, Package, compilation, linking, and Archive behavior.',
+    title: 'One path for every caller',
+    copy: 'Editors, terminals, and larger build systems can share one request path instead of carrying their own Package and compiler policy.',
   },
 ];
 ---
@@ -26,62 +26,73 @@ const capabilities = [
   description="Puffer is Tetrodotoxin's all-in-one compiler driver, Workspace host, command interface, and language server."
 >
   <main id="main">
-    <section class="product-hero">
-      <div class="container product-hero-grid">
-        <div>
-          <p class="subheader">The all-in-one implementation</p>
-          <h1>One front door for the whole toolchain.</h1>
-          <p class="product-summary">
-            Puffer is how people and build systems enter Tetrodotoxin. Its
-            command line turns Packages into finished products, while its
-            language server gives editors a live understanding of the same
-            sources.
-          </p>
-          <div class="button-row">
-            <a class="button button-primary" href={SITE.puffer}>
-              Browse Puffer
-              <span aria-hidden="true">↗</span>
-            </a>
-            <a class="button button-secondary" href="/docs/core-concepts/">
-              Understand the platform
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
+    <section class="hero puffer-hero">
+      <div class="container hero-content">
+        <div class="hero-heading">
+          <p class="subheader">Keep the whole project within reach</p>
+          <h1 class="two-tone-title">
+            <span>One front door</span>
+            <span>For the whole toolchain</span>
+          </h1>
         </div>
 
-        <div class="puffer-journey" aria-label="Editor, command line, and build system requests enter a Puffer session, use Tetrodotoxin owners, and return diagnostics or completed products">
-          <div class="puffer-inputs">
-            <span>Editor</span>
-            <span>Command line</span>
-            <span>Build system</span>
+        <div class="hero-support">
+          <div class="hero-copy">
+            <p class="hero-summary">
+              Open a Package once and keep the whole journey connected. Follow
+              its meaning across every source, then build the products that
+              belong to it without assembling another toolchain around the
+              language.
+            </p>
+            <div class="button-row">
+              <a class="button button-primary" href={SITE.puffer}>
+                Browse Puffer
+              </a>
+              <a class="button button-secondary" href="/docs/core-concepts/">
+                Platform guide
+              </a>
+            </div>
           </div>
-          <div class="puffer-arrow" aria-hidden="true">↓</div>
-          <div class="puffer-session">
-            <small>Process + transport + presentation</small>
-            <strong>Puffer session</strong>
+
+          <div class="puffer-journey" aria-label="Editor, command line, and build system requests enter a Puffer session, use Tetrodotoxin owners, and return diagnostics or completed products">
+            <p>Puffer request path</p>
+            <div class="puffer-inputs">
+              <span>Editor</span>
+              <span>Command line</span>
+              <span>Build system</span>
+            </div>
+            <div class="puffer-arrow" aria-hidden="true">↓</div>
+            <div class="puffer-session">
+              <small>One connected request path</small>
+              <strong>Puffer session</strong>
+            </div>
+            <div class="puffer-arrow" aria-hidden="true">↓</div>
+            <div class="puffer-owners">
+              <span>Workspace</span>
+              <span>Package</span>
+              <span>Dialects</span>
+              <span>Terminals</span>
+              <span>Linker</span>
+            </div>
+            <div class="puffer-arrow" aria-hidden="true">↓</div>
+            <div class="puffer-result">Diagnostics or completed products</div>
           </div>
-          <div class="puffer-arrow" aria-hidden="true">↓</div>
-          <div class="puffer-owners">
-            <span>Workspace</span>
-            <span>Package</span>
-            <span>Dialects</span>
-            <span>Terminals</span>
-            <span>Linker</span>
-          </div>
-          <div class="puffer-arrow" aria-hidden="true">↓</div>
-          <div class="puffer-result">Diagnostics or completed products</div>
         </div>
       </div>
     </section>
 
     <section class="section section-bordered">
       <div class="container section-heading">
-        <p class="subheader">Use the platform</p>
-        <h2>Do not assemble the experience twice.</h2>
+        <p class="subheader">From first edit to finished product</p>
+        <h2 class="two-tone-title">
+          <span>Understand the source</span>
+          <span>Then build from it</span>
+        </h2>
         <p>
-          A hover, diagnostic, build, and Archive begin from the same view of
-          the program. Puffer coordinates that journey while the semantic and
-          product owners keep their real responsibilities.
+          A new Dialect can feel useful as soon as it joins the Workspace.
+          Puffer brings its identities into the editor and the build, so authors
+          can spend their time shaping the language instead of rebuilding the
+          toolchain around it.
         </p>
       </div>
 
@@ -99,20 +110,23 @@ const capabilities = [
     </section>
 
     <section class="section">
-      <div class="container callout puffer-optional">
+      <div class="container callout">
         <div>
-          <p class="subheader">Complete, not compulsory</p>
-          <h2>Puffer is optional orchestration.</h2>
+          <p class="subheader">Complete when you want it</p>
+          <h2 class="two-tone-title">
+            <span>Start with the whole experience</span>
+            <span>Keep every layer replaceable</span>
+          </h2>
           <p>
-            Build systems can call its command interface and editors can use its
-            language server. A product that needs a different session can embed
-            the Tetrodotoxin libraries directly and keep the same Package,
-            compiler, Linker, and Archive behavior.
+            Puffer can meet a project as its editor host, command interface, and
+            build front door together. When a product wants a different shell,
+            the Tetrodotoxin libraries remain available underneath it, keeping
+            the same Package, compiler, Linker, and Archive behavior while the
+            experience changes around them.
           </p>
         </div>
         <a class="button button-primary" href={SITE.puffer}>
-          Explore the implementation
-          <span aria-hidden="true">↗</span>
+          Explore Puffer
         </a>
       </div>
     </section>

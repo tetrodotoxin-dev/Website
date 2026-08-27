@@ -9,13 +9,17 @@ export const SITE = {
   releases: 'https://github.com/tetrodotoxin-dev/Tetrodotoxin/releases',
   puffer: 'https://github.com/tetrodotoxin-dev/Tetrodotoxin/tree/tetrodotoxin-1.0/puffer',
   ttxExamples: 'https://github.com/tetrodotoxin-dev/Tetrodotoxin/tree/tetrodotoxin-1.0/apps/ttx',
+  appGuide: 'https://github.com/tetrodotoxin-dev/Tetrodotoxin/blob/tetrodotoxin-1.0/tetrodotoxin/app/README.md',
+  sceneGuide: 'https://github.com/tetrodotoxin-dev/Tetrodotoxin/blob/tetrodotoxin-1.0/tetrodotoxin/scene/README.md',
+  languageGuide: 'https://github.com/tetrodotoxin-dev/Tetrodotoxin/blob/tetrodotoxin-1.0/tetrodotoxin/language/README.md',
+  contributing: 'https://github.com/tetrodotoxin-dev/Tetrodotoxin/blob/tetrodotoxin-1.0/CONTRIBUTING.md',
 } as const;
 
 export const primaryNavigation = [
-  { label: 'Docs', href: '/docs/' },
   { label: 'TTX', href: '/ttx/' },
   { label: 'Puffer', href: '/puffer/' },
-  { label: 'Download', href: '/download/' },
+  { label: 'Docs', href: '/docs/' },
+  { label: 'Downloads', href: '/download/' },
 ] as const;
 
 export const docsNavigation = [

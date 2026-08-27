@@ -1,5 +1,5 @@
 ---
-import ReferenceTree from '../../../components/ReferenceTree.astro';
+import ReferenceContents from '../../../components/ReferenceContents.astro';
 import ReferenceLayout from '../../../layouts/ReferenceLayout.astro';
 import {
   documentationParagraphs,
@@ -68,12 +68,12 @@ function sourceDeclarations(sourceId: string): ReferenceNode[] {
     <div class="reference-section-heading">
       <div>
         <span class="reference-kind">Completed Workspace product</span>
-        <h2 id="package-graph-heading">Package sources</h2>
+        <h2 id="package-graph-heading">Package contents</h2>
       </div>
-      <p>Each source appears once beneath the Package. External Package dependencies remain attached to the source that imports them.</p>
+      <p>Explore the sources behind each Monograph Dialect, with shared Package dependencies collected in one place.</p>
     </div>
-    <div class="reference-tree-panel">
-      <ReferenceTree document={document} />
+    <div class="reference-package-contents-panel">
+      <ReferenceContents document={document} />
     </div>
   </section>
 
