@@ -21,5 +21,6 @@ export const primaryNavigation = [
 export const docsNavigation = [
   { label: 'Introduction', href: '/docs/' },
   { label: 'Core concepts', href: '/docs/core-concepts/' },
+  { label: 'API reference', href: '/docs/reference/' },
   { label: 'Development', href: '/docs/development/' },
 ] as const;

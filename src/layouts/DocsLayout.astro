@@ -6,7 +6,7 @@ import { docsNavigation } from '../data/site';
 type Frontmatter = {
   title: string;
   description: string;
-  eyebrow?: string;
+  subheader?: string;
 };
 
 type Props = MarkdownLayoutProps<Frontmatter>;
@@ -40,7 +40,7 @@ const pathname = Astro.url.pathname;
 
       <article class="docs-content">
         <header class="docs-header">
-          <p class="eyebrow">{frontmatter.eyebrow ?? 'Documentation'}</p>
+          <p class="subheader">{frontmatter.subheader ?? 'Documentation'}</p>
           <h1>{frontmatter.title}</h1>
           <p>{frontmatter.description}</p>
         </header>

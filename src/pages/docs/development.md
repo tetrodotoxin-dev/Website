@@ -2,7 +2,7 @@
 layout: ../../layouts/DocsLayout.astro
 title: Development
 description: How to approach Tetrodotoxin changes so the resulting system remains clear, owned, and useful to people.
-eyebrow: Contributing
+subheader: Contributing
 ---
 
 Tetrodotoxin is built around explicit ownership. Before choosing a file or
@@ -51,10 +51,10 @@ turns that direction into review guidance.
 
 ## Source repositories
 
-| Repository | Owner |
-| --- | --- |
+| Repository                                                       | Owner                                                                       |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [Tetrodotoxin](https://github.com/tetrodotoxin-dev/Tetrodotoxin) | Languages, toolchain, runtime, editor support, applications, and validation |
-| [Website](https://github.com/tetrodotoxin-dev/Website) | The public Astro website and documentation shell |
+| [Website](https://github.com/tetrodotoxin-dev/Website)           | The public Astro website and documentation shell                            |
 
 Each repository owns independent Git history, dependencies, builds, and
 validation. A change spanning both must report evidence for each product tree

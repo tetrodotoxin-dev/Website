@@ -1,0 +1,112 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { docsNavigation } from '../data/site';
+import {
+  isReferenceType,
+  packageReferenceHref,
+  referencePackages,
+  sourceAnchor,
+  typeReferenceHref,
+} from '../data/reference';
+
+interface Props {
+  title: string;
+  description: string;
+  subheader?: string;
+  activePackage?: string;
+}
+
+const { title, description, subheader = 'TTX reference', activePackage } = Astro.props;
+const pathname = Astro.url.pathname;
+const activeDocument = referencePackages.find((document) => document.package.name === activePackage);
+---
+
+<BaseLayout title={`${title} · Tetrodotoxin Docs`} description={description}>
+  <main id="main" class="docs-main reference-main">
+    <div class="container docs-shell reference-shell">
+      <aside class="docs-sidebar">
+        <div>
+          <span>Documentation</span>
+          <strong>Learn Tetrodotoxin</strong>
+        </div>
+        <nav aria-label="Documentation navigation">
+          {
+            docsNavigation.map((item) => (
+              <a
+                href={item.href}
+                aria-current={pathname === item.href || (item.href === '/docs/reference/' && pathname.startsWith(item.href)) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="reference-sidebar-heading">
+          <span>Generated reference</span>
+          <strong>TTX packages</strong>
+        </div>
+        <nav class="reference-package-navigation" aria-label="TTX package reference">
+          {
+            referencePackages.map((document) => {
+              const packageHref = packageReferenceHref(document.package.name);
+              const expanded = activeDocument === document;
+              return (
+                <div class:list={['reference-package-branch', { 'reference-package-active': expanded }]}>
+                  <a
+                    href={packageHref}
+                    aria-current={pathname === packageHref ? 'page' : undefined}
+                    aria-expanded={expanded ? 'true' : undefined}
+                  >
+                    {document.package.name.replace('Perimortem.', '')}
+                  </a>
+                  {expanded && (
+                    <div class="reference-package-tree">
+                      {document.sources.map((source) => {
+                        const types = document.nodes.filter(
+                          (node) => node.source === source.id && isReferenceType(node),
+                        );
+                        if (types.length === 0) return null;
+                        return (
+                          <section class="reference-package-source">
+                            <a href={`${packageHref}#${sourceAnchor(source.id)}`}>{source.path}</a>
+                            <div class="reference-package-types">
+                              {types.map((node) => {
+                                const href = typeReferenceHref(document, node);
+                                return (
+                                  <a href={href} aria-current={pathname === href ? 'page' : undefined}>
+                                    {node.name}
+                                  </a>
+                                );
+                              })}
+                            </div>
+                          </section>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          }
+        </nav>
+
+        <a class="docs-source" href="https://github.com/tetrodotoxin-dev/Tetrodotoxin/tree/tetrodotoxin-1.0/packages/ttx">
+          Browse the sources
+          <span aria-hidden="true">↗</span>
+        </a>
+      </aside>
+
+      <article class="docs-content reference-content">
+        <header class="docs-header">
+          <p class="subheader">{subheader}</p>
+          <h1>{title}</h1>
+          <p>{description}</p>
+        </header>
+        <div class="prose reference-prose">
+          <slot />
+        </div>
+      </article>
+    </div>
+  </main>
+</BaseLayout>

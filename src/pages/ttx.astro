@@ -44,10 +44,10 @@ const dialects = [
     <section class="hero ttx-hero">
       <div class="container hero-content">
         <div class="hero-heading">
-          <p class="eyebrow">One implementation on Tetrodotoxin</p>
-          <h1>
-            <span>A family of languages.</span>
-            <span class="hero-title-accent">Built to compose.</span>
+          <p class="subheader">Tetrodotoxin's Lingua Franca</p>
+          <h1 class="two-tone-title">
+            <span>A family of languages</span>
+            <span>Built to compose</span>
           </h1>
         </div>
 
@@ -57,7 +57,7 @@ const dialects = [
               TTX is Tetrodotoxin's first integrated language family. Package,
               Library, App, Scene, Render, and Shader share a semi-common Lexicon
               and common graph contracts while keeping the semantics that make
-              each Dialect useful.
+              each Dialect useful for its targeted domain.
             </p>
             <div class="button-row">
               <a class="button button-primary" href="#scene-lifetime">
@@ -97,58 +97,51 @@ const dialects = [
 
     <section class="section section-bordered">
       <div class="container section-heading">
-        <p class="eyebrow">Keep the boundary clear</p>
-        <h2>A language family, not the platform itself.</h2>
+        <p class="subheader">Less Bootstraps to pull</p>
+        <h2 class="two-tone-title">
+          <span>Open and extensible by design</span>
+          <span>Just with the batteries included</span>
+        </h2>
         <p>
-          Tetrodotoxin supplies the extension model, Workspace lifetime,
-          semantic graph, and Terminal boundary. TTX is one cohesive set of
-          language choices built on that foundation.
+          TTX serves as a solid foundation for Tetrodotoxin's extension model and provides
+          several language variants across a wide range of domains. Each Dialect shares
+          common toolchain infrastructure while keeping the details localized making it
+          easy to organically split off or merge DSLs.
         </p>
       </div>
 
-      <div class="container identity-split">
-        <article>
-          <span>Platform</span>
-          <h3>Tetrodotoxin</h3>
+      <div class="container principle-grid identity-split">
+        <article class="principle-card">
+          <span>Jumpstart</span>
           <p>
-            Installs Dialects, retains their real identities in a Workspace,
-            coordinates completion, and gives producers one boundary where
-            finished products can leave the graph.
+            Start building apps today using TTX's prebuilt Dialects and semantics and adapt the base
+            language features to your needs over time. Create your own Dialects to create easy language
+            extensions or remove the ones that get in the way.
           </p>
         </article>
-        <article>
-          <span>Language family</span>
-          <h3>TTX</h3>
+        <article class="principle-card">
+          <span>Integrate</span>
           <p>
-            Chooses a related Lexicon and supplies cooperating Dialects for
-            Packages, reusable execution, applications, scenes, render
-            contracts, and shaders.
+            Leverage TTX's existing runtime and semantic graph to gain toolchain features for free.
+            Any Dialect can be easily Substituted by your own frontend or toolchain. If it walks like a
+            duck and quacks like a duck then TTX can turn it into SPIR-V!
           </p>
         </article>
-      </div>
-
-      <div class="container future-language">
-        <span>Why the distinction matters</span>
-        <p>
-          A C frontend can participate in Tetrodotoxin's Workspace, Packages,
-          shared graph contracts, and Terminals without becoming a TTX Dialect
-          or adopting TTX source. Another family can make the same choice.
-        </p>
       </div>
     </section>
 
     <section class="section">
       <div class="container split-heading ttx-dialect-heading">
         <div>
-          <p class="eyebrow">Semi-common, not normalized</p>
-          <h2 class="ttx-lexicon-title">
-            <span>One Lexicon.</span>
-            <span>Several semantic owners.</span>
+          <p class="subheader">Semi-common, not normalized</p>
+          <h2 class="two-tone-title">
+            <span>One Lexicon</span>
+            <span>Several semantic owners</span>
           </h2>
         </div>
         <p>
-          Shared spellings make the family readable as one system. Each Dialect
-          still owns its grammar, completion rules, semantic identities, and
+          Shared spellings make the family readable as one system while each Dialect
+          still gets to owns its grammar, completion rules, semantic identities, and
           persistent meaning.
         </p>
       </div>
@@ -169,7 +162,7 @@ const dialects = [
     <section id="scene-lifetime" class="section section-bordered">
       <div class="container split-heading scene-heading">
         <div>
-          <p class="eyebrow">One application, several Dialects</p>
+          <p class="subheader">One application, several Dialects</p>
           <h2>Scene Lifetime becomes one semantic graph.</h2>
         </div>
         <p>
@@ -289,7 +282,7 @@ lifecycle = Scene &lbrace;
     <section class="section">
       <div class="container callout">
         <div>
-          <p class="eyebrow">The family can keep growing</p>
+          <p class="subheader">The family can keep growing</p>
           <h2>Add a Dialect without building another island.</h2>
           <p>
             A new TTX Dialect can adopt the shared Lexicon where it is useful,

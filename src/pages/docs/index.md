@@ -2,7 +2,7 @@
 layout: ../../layouts/DocsLayout.astro
 title: Tetrodotoxin documentation
 description: Learn why Tetrodotoxin connects purpose-built languages and how its shared semantic model fits together.
-eyebrow: Start here
+subheader: Start here
 ---
 
 Tetrodotoxin is for products that already contain several languages, even when
@@ -40,6 +40,12 @@ introduces Dialects, TTX, the Workspace, and Terminals in context.
 
 [TTX](/ttx/) shows how Package, Library, App, Scene, Render, and Shader share a
 semi-common Lexicon while remaining distinct Dialects in one semantic graph.
+
+### Browse the source API
+
+[TTX package reference](/docs/reference/) presents the public identities,
+relationships, and authored documentation generated from completed Package
+graphs.
 
 ### Work on the project
 

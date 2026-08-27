@@ -1,0 +1,55 @@
+---
+import {
+  packageReferenceHref,
+  sourceAnchor,
+  type ReferencePackage,
+} from '../data/reference';
+
+interface Props {
+  document: ReferencePackage;
+}
+
+const { document } = Astro.props;
+const sources = document.sources.filter((source) => source.id !== document.package.root);
+const packageImports = (root: string) => document.edges.filter(
+  (edge) => edge.from === root && edge.kind === 'package-import',
+);
+---
+
+<ul class="reference-tree">
+  <li class="reference-tree-node reference-tree-root">
+    <div>
+      <strong>{document.package.name}</strong>
+    </div>
+    {
+      sources.length > 0 && (
+        <ul>
+          {sources.map((source) => {
+            const dependencies = packageImports(source.root);
+            return (
+              <li class="reference-tree-node">
+                <div>
+                  <span class="reference-tree-dialect">{source.dialect}</span>
+                  <a href={`#${sourceAnchor(source.id)}`}>{source.path}</a>
+                </div>
+                {dependencies.length > 0 && (
+                  <ul>
+                    {dependencies.map((edge) => (
+                      <li class="reference-tree-node reference-tree-package">
+                        <div>
+                          <span class="reference-tree-dialect">Package</span>
+                          <a href={packageReferenceHref(edge.target.package)}>{edge.target.package}</a>
+                          <small>{edge.target.major}.{edge.target.minor}</small>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )
+    }
+  </li>
+</ul>

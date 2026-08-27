@@ -1,0 +1,226 @@
+---
+import ReferenceLayout from '../../../../layouts/ReferenceLayout.astro';
+import {
+  documentationParagraphs,
+  isReferenceType,
+  nodeAnchor,
+  nodeReferenceHref,
+  packageReferenceHref,
+  packageSlug,
+  referencePackages,
+  referenceKindLabel,
+  targetHref,
+  typeSlug,
+  type ReferenceEdge,
+  type ReferenceNode,
+  type ReferencePackage,
+  type ReferenceTarget,
+} from '../../../../data/reference';
+
+interface Props {
+  document: ReferencePackage;
+  nodeId: string;
+}
+
+export function getStaticPaths() {
+  return referencePackages.flatMap((document) =>
+    document.nodes.filter(isReferenceType).map((node) => ({
+      params: { package: packageSlug(document.package.name), type: typeSlug(document, node) },
+      props: { document, nodeId: node.id },
+    })),
+  );
+}
+
+const { document, nodeId } = Astro.props;
+const node = document.nodes.find((candidate) => candidate.id === nodeId) as ReferenceNode;
+const source = document.sources.find((candidate) => candidate.id === node.source);
+const nodeById = new Map(document.nodes.map((candidate) => [candidate.id, candidate]));
+const edgesFrom = (id: string) => document.edges.filter((edge) => edge.from === id);
+const childEdges = edgesFrom(node.id).filter((edge) => edge.kind === 'declares' || edge.kind === 'case');
+const children = childEdges
+  .map((edge) => nodeById.get(edge.target.node))
+  .filter((candidate): candidate is ReferenceNode => Boolean(candidate));
+const nestedTypes = children.filter(isReferenceType);
+const properties = children.filter((candidate) => ['property', 'render-binding'].includes(candidate.kind));
+const methods = children.filter((candidate) => ['method', 'callable', 'render-stage'].includes(candidate.kind));
+const aliases = children.filter((candidate) => candidate.kind === 'alias');
+const other = children.filter(
+  (candidate) => !isReferenceType(candidate)
+    && !['property', 'render-binding', 'method', 'callable', 'render-stage', 'alias'].includes(candidate.kind),
+);
+const paragraphs = documentationParagraphs(node.documentation);
+const representedTargets = new Set(children.map((candidate) => candidate.id));
+const typeRelationships = edgesFrom(node.id).filter(
+  (edge) => !['declares', 'case', 'value', 'root', 'layer', 'semantic-root'].includes(edge.kind),
+);
+
+function displayTarget(edge: ReferenceEdge): ReferenceTarget {
+  const intermediate = nodeById.get(edge.target.node);
+  const typeEdge = intermediate && !representedTargets.has(intermediate.id)
+    ? edgesFrom(intermediate.id).find((candidate) => candidate.kind === 'type')
+    : undefined;
+  return typeEdge?.target ?? edge.target;
+}
+
+const description = paragraphs[0] ?? `${node.name} is a public ${referenceKindLabel(node.kind)} in ${document.package.name}.`;
+---
+
+<ReferenceLayout
+  title={node.name}
+  description={description}
+  subheader={`${document.package.name} · ${referenceKindLabel(node.kind)}`}
+  activePackage={document.package.name}
+>
+  <nav class="reference-breadcrumbs" aria-label="Breadcrumb">
+    <a href="/docs/reference/">Reference</a>
+    <span aria-hidden="true">/</span>
+    <a href={packageReferenceHref(document.package.name)}>{document.package.name}</a>
+    <span aria-hidden="true">/</span>
+    <span>{node.name}</span>
+  </nav>
+
+  <section class="reference-type-introduction">
+    <pre><code>{node.declaration}</code></pre>
+    {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    {
+      node.location.authored && (
+        <p class="reference-location">
+          <span>Defined in</span>
+          <code>{source?.path ?? node.location.path}:{node.location.line}:{node.location.column}</code>
+        </p>
+      )
+    }
+  </section>
+
+  {
+    typeRelationships.length > 0 && (
+      <section class="reference-type-section" aria-labelledby="type-relationships">
+        <h2 id="type-relationships">Relationships</h2>
+        <dl class="reference-relationships reference-type-relationships">
+          {typeRelationships.map((edge) => {
+            const target = displayTarget(edge);
+            const href = targetHref(target, document.package.name);
+            return (
+              <div>
+                <dt>{edge.kind}{edge.label ? ` · ${edge.label}` : ''}</dt>
+                <dd>
+                  {href ? <a href={href}>{target.name}</a> : <code>{target.name}</code>}
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
+      </section>
+    )
+  }
+
+  {
+    nestedTypes.length > 0 && (
+      <section class="reference-type-section" aria-labelledby="nested-types">
+        <h2 id="nested-types">Nested types</h2>
+        <div class="reference-type-grid">
+          {nestedTypes.map((child) => (
+            <a class="reference-type-card" href={nodeReferenceHref(document, child)}>
+              <span>{referenceKindLabel(child.kind)}</span>
+              <h3>{child.name}</h3>
+              {documentationParagraphs(child.documentation)[0] && <p>{documentationParagraphs(child.documentation)[0]}</p>}
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    properties.length > 0 && (
+      <section class="reference-type-section" aria-labelledby="properties">
+        <h2 id="properties">Properties</h2>
+        <div class="reference-members">
+          {properties.map((member) => {
+            const typeEdge = edgesFrom(member.id).find((edge) => edge.kind === 'type');
+            const target = typeEdge && displayTarget(typeEdge);
+            const href = target && targetHref(target, document.package.name);
+            return (
+              <article class="reference-member" id={nodeAnchor(member.id)}>
+                <header><h3>{member.name}</h3><span>{referenceKindLabel(member.kind)}</span></header>
+                <pre><code>{member.declaration}</code></pre>
+                {documentationParagraphs(member.documentation).map((paragraph) => <p>{paragraph}</p>)}
+                {target && (
+                  <p class="reference-member-type">
+                    <span>Type</span>
+                    {href ? <a href={href}>{target.name}</a> : <code>{target.name}</code>}
+                  </p>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    methods.length > 0 && (
+      <section class="reference-type-section" aria-labelledby="methods">
+        <h2 id="methods">Methods</h2>
+        <div class="reference-members">
+          {methods.map((member) => {
+            const signature = edgesFrom(member.id).filter((edge) => edge.kind === 'parameter' || edge.kind === 'result');
+            return (
+              <article class="reference-member" id={nodeAnchor(member.id)}>
+                <header><h3>{member.name}</h3><span>{member.role ? `${member.role} ${referenceKindLabel(member.kind)}` : referenceKindLabel(member.kind)}</span></header>
+                <pre><code>{member.declaration}</code></pre>
+                {documentationParagraphs(member.documentation).map((paragraph) => <p>{paragraph}</p>)}
+                {signature.length > 0 && (
+                  <dl class="reference-relationships">
+                    {signature.map((edge) => {
+                      const target = displayTarget(edge);
+                      const href = targetHref(target, document.package.name);
+                      return (
+                        <div>
+                          <dt>{edge.kind}{edge.label ? ` · ${edge.label}` : ''}</dt>
+                          <dd>{href ? <a href={href}>{target.name}</a> : <code>{target.name}</code>}</dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    aliases.length > 0 && (
+      <section class="reference-type-section" aria-labelledby="values-and-aliases">
+        <h2 id="values-and-aliases">Values and aliases</h2>
+        <div class="reference-alias-list">
+          {aliases.map((member) => {
+            const targetId = edgesFrom(member.id).find((edge) => edge.kind === 'alias')?.target.node;
+            const target = nodeById.get(targetId ?? '');
+            return (
+              <div id={nodeAnchor(member.id)}>
+                <code>{member.name}</code>
+                {target && target.kind !== 'value' && <a href={nodeReferenceHref(document, target)}>{target.name} <span aria-hidden="true">→</span></a>}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    other.length > 0 && (
+      <section class="reference-type-section" aria-labelledby="other-members">
+        <h2 id="other-members">Other members</h2>
+        <div class="reference-alias-list">
+          {other.map((member) => <div id={nodeAnchor(member.id)}><code>{member.declaration || member.name}</code><span>{referenceKindLabel(member.kind)}</span></div>)}
+        </div>
+      </section>
+    )
+  }
+</ReferenceLayout>

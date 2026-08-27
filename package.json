@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
+    "docs:sync": "node scripts/sync-reference.mjs",
     "preview": "astro preview",
     "preview:cloudflare": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy",

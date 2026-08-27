@@ -2,7 +2,7 @@
 layout: ../../layouts/DocsLayout.astro
 title: Core concepts
 description: The small set of ideas that let several concrete languages participate in one toolchain without losing their meaning.
-eyebrow: The model
+subheader: The model
 ---
 
 The central problem is not parsing several syntaxes. It is keeping one fact from
