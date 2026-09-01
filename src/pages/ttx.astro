@@ -1,153 +1,264 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroDiagram from '../components/HeroDiagram.astro';
 import { SITE } from '../data/site';
 
 const dialects = [
   {
+    label: 'Infrastructure',
+    title: 'Build',
+    copy: 'Sources one live Package graph, owns invocation inputs and exported product requests, and retains one opaque Environment child without inspecting its provider model.',
+  },
+  {
+    label: 'Host and target',
+    title: 'Environment',
+    copy: 'Owns reachable roots, SDK and project plugins, Package repositories, target observations, child Toolchain construction, and confined publication policy.',
+  },
+  {
     label: 'Composition',
     title: 'Package',
-    copy: 'Connects source-local imports, exact Package dependencies, embedded resources, Archives, and publication routes.',
+    copy: 'Names source and Package authorities, confines embedded resources, reconstructs semantic graphs, and publishes durable products through a restricted Library surface that exposes ordinary semantic identities rather than a second Package member table.',
   },
   {
     label: 'Execution',
     title: 'Library',
-    copy: 'Owns Types, values, Functions, data flow, and reusable execution hosted directly or inside another Dialect.',
+    copy: 'Owns types, values, functions, data flow, and reusable execution that Scene and Shader reuse through real Library child graphs instead of copied execution records.',
   },
   {
     label: 'Application',
     title: 'App',
-    copy: 'Selects runtime policy and connects authored Scene lifecycle to the completed product.',
+    copy: 'Selects runtime policy and connects authored Scene lifecycle to the completed product by mapping exact Scene signals to transitions without moving Scene state or event meaning into the application shell.',
   },
   {
     label: 'Lifecycle',
     title: 'Scene',
-    copy: 'Owns state, Signals, preparation, updates, release, and one hosted Library layer.',
+    copy: 'Owns state, signals, preparation, updates, release, and one hosted Library layer, keeping lifecycle as Scene meaning while executable fields and functions remain genuine Library identities.',
   },
   {
     label: 'Contract',
     title: 'Render',
-    copy: 'States GPU stages, resources, locations, and behavior without becoming a Shader implementation.',
+    copy: 'States GPU stages, resources, locations, and behavior as a requirement that can outlive or be shared by several concrete Shader programs without becoming their implementation.',
   },
   {
     label: 'GPU program',
     title: 'Shader',
-    copy: 'Owns resources, Programs, and one hosted Library layer for vertex and fragment execution.',
+    copy: 'Owns resources, programs, and one hosted Library layer for vertex and fragment execution, with Interface negotiation proving that real Library callables satisfy neighboring Render contracts.',
+  },
+];
+
+const contracts = [
+  {
+    label: 'Identity',
+    title: 'Ask the real owner',
+    copy: 'Abstract keeps one semantic subject in view while concepts let that owner answer open-ended questions, allowing the same identity to serve hover, Package reconstruction, and compilation without becoming a universal node or consumer-specific copy.',
+  },
+  {
+    label: 'Certainty',
+    title: 'Keep uncertainty factual',
+    copy: 'Unknown is provisional, None proves completed absence, and Constant proves one immutable fact, so a field with an unknown type can still retain truthful documentation, source location, and other established relationships.',
+  },
+  {
+    label: 'Projection',
+    title: 'Expose shape, not machinery',
+    copy: 'Packs carry real producers while immutable Layouts expose negotiable shape without opening the owner’s private model, allowing Slice and Swizzle to publish useful partial flow before their final projection exists.',
+  },
+  {
+    label: 'Relationship',
+    title: 'Preserve how meaning is reached',
+    copy: 'References keep live questions and Interfaces negotiate richer compatibility without storing selected answers or copied declarations, so a source edit can replace one authority while the same Reference chain asks it again.',
+  },
+];
+
+const roles = [
+  {
+    label: 'Semantic ABI',
+    title: 'TTX',
+    copy: 'Stable host-neutral contracts and open concept questions shared by independently designed semantic owners.',
+  },
+  {
+    label: 'Reference family',
+    title: 'Bundled Dialects',
+    copy: 'A Dialect is one installed language provider, and Build, Environment, Package, Library, App, Scene, Render, and Shader form a reference family that stress-tests composition without defining the platform boundary.',
+  },
+  {
+    label: 'Platform',
+    title: 'Tetrodotoxin',
+    copy: 'Tetrodotoxin is the complete platform around TTX, with a Workspace that retains the living semantic graph and independent Terminals for Packages, compilers, bindings, and other consumers.',
+  },
+  {
+    label: 'Replaceable host',
+    title: 'Puffer',
+    copy: 'Puffer is the executable entry point for one source invocation or language-server session, coordinating the graph while installed languages and output providers retain their decisions.',
   },
 ];
 ---
 
 <BaseLayout
-  title="TTX · A family of composable Dialects"
-  description="TTX is Tetrodotoxin's integrated family of Package, Library, App, Scene, Render, and Shader Dialects."
+  title="TTX · Shared meaning without a shared language"
+  description="TTX supplies stable semantic contracts and open concepts that let concrete languages cooperate without becoming one universal IR."
 >
   <main id="main">
     <section class="hero ttx-hero">
       <div class="container hero-content">
         <div class="hero-heading">
-          <p class="subheader">Tetrodotoxin's Lingua Franca</p>
+          <p class="subheader">Tetrodotoxin's semantic vocabulary</p>
           <h1 class="two-tone-title">
-            <span>A family of languages</span>
-            <span>Built to compose</span>
+            <span>Share the meaning</span>
+            <span>Keep the language</span>
           </h1>
         </div>
 
         <div class="hero-support">
           <div class="hero-copy">
             <p class="hero-summary">
-              TTX is Tetrodotoxin's first integrated language family. Package,
-              Library, App, Scene, Render, and Shader share a semi-common Lexicon
-              and common graph contracts while keeping the semantics that make
-              each Dialect useful for its targeted domain.
+              TTX is the host-neutral semantic foundation beneath
+              Tetrodotoxin. It lets real objects from independently designed
+              languages expose stable contracts and answer open-ended concept
+              questions without first becoming nodes in one common IR. The
+              bundled languages exercise that foundation as a modular reference
+              family, not as the semantic baseline every other language must
+              adopt.
             </p>
             <div class="button-row">
-              <a class="button button-primary" href="#multiple-scenes">
-                Multiple Scenes
+              <a class="button button-primary" href="/docs/getting-started/">
+                Getting Started
               </a>
-              <a class="button button-secondary" href={SITE.ttxExamples}>
-                TTX examples
+              <a class="button button-secondary" href="#echo">
+                See TTX source
               </a>
             </div>
           </div>
 
-          <div class="ttx-family-map" aria-label="Package, Library, App, Scene, Render, and Shader share a semi-common Lexicon and join a Tetrodotoxin Workspace">
-            <p>TTX language family</p>
-            <div class="ttx-dialect-cloud">
-              <span>Package</span>
-              <span>Library</span>
-              <span>App</span>
-              <span>Scene</span>
-              <span>Render</span>
-              <span>Shader</span>
-            </div>
-            <div class="ttx-lexicon">
-              <small>Semi-common Lexicon</small>
-              <strong>Tokens · Definitions · Packs · Layouts · Routes</strong>
-            </div>
-            <div class="ttx-family-arrow" aria-hidden="true">↓</div>
-            <div class="ttx-platform-band">
-              <small>Tetrodotoxin platform</small>
-              <strong>Semantic Workspace + Terminal boundary</strong>
-            </div>
-          </div>
+          <HeroDiagram
+            label="Concrete languages"
+            description="Independently designed languages keep their own models while exposing the semantic questions their tools genuinely share."
+            connectors={['raise shared meaning', 'support shared tools']}
+            layers={[
+              { kind: 'nodes', items: ['Infrastructure', 'Composition', 'Execution', 'Lifecycle + GPU'] },
+              {
+                kind: 'content',
+                eyebrow: 'TTX semantic contracts',
+                title: 'Identity · Concepts · Type · Pack · Layout',
+              },
+              {
+                kind: 'content',
+                eyebrow: 'Tetrodotoxin platform',
+                title: 'Shared tools + independent outputs',
+              },
+            ]}
+          />
         </div>
       </div>
     </section>
 
     <section class="section section-bordered">
       <div class="container section-heading">
-        <p class="subheader">Less Bootstraps to pull</p>
         <h2 class="two-tone-title">
-          <span>Open and extensible by design</span>
-          <span>Just with the batteries included</span>
+          <span>Share one semantic foundation</span>
+          <span>Keep every owner distinct</span>
         </h2>
         <p>
-          TTX serves as a solid foundation for Tetrodotoxin's extension model and provides
-          several language variants across a wide range of domains. Each Dialect shares
-          common toolchain infrastructure while keeping the details localized making it
-          easy to organically split off or merge DSLs.
+          The name TTX is easy to confuse with the bundled source family. These
+          four roles separate the semantic foundation, its reference languages,
+          the complete platform, and the executable users run.
         </p>
       </div>
 
-      <div class="container principle-grid identity-split">
-        <article class="principle-card">
+      <div class="container grid columns-2 section-content">
+        {roles.map((role) => (
+          <article class="card">
+            <span>{role.label}</span>
+            <h3>{role.title}</h3>
+            <p>{role.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container section-heading">
+        <h2 class="two-tone-title">
+          <span>Raise meaning by participation</span>
+          <span>Project representation at the edge</span>
+        </h2>
+        <p>
+          Shared contracts rise only when independent domains demonstrate the
+          same question. Everything richer stays with its concrete owner. That
+          restraint gives a new language useful integration without asking it
+          to inherit another language's assumptions.
+        </p>
+      </div>
+
+      <div class="container grid columns-2 section-content">
+        <article class="card card-plain">
           <span>Jumpstart</span>
           <p>
-            Start building apps today using TTX's prebuilt Dialects and semantics and adapt the base
-            language features to your needs over time. Create your own Dialects to create easy language
-            extensions or remove the ones that get in the way.
+            Use the bundled Package, Library, App, Scene, Render, and Shader
+            languages as a complete starting point. Replace or add Dialects as a
+            product develops without rebuilding the shared Workspace around
+            every new grammar.
           </p>
         </article>
-        <article class="principle-card">
+        <article class="card card-plain">
           <span>Integrate</span>
           <p>
-            Leverage TTX's existing runtime and semantic graph to gain toolchain features for free.
-            Any Dialect can be easily Substituted by your own frontend or toolchain. If it walks like a
-            duck and quacks like a duck then TTX can turn it into SPIR-V!
+            A Dialect that exposes real documentation, references, types,
+            packs, layouts, addressables, and callables can join generic hover,
+            navigation, Package, and Terminal infrastructure. It contributes
+            only the concepts it can honestly support.
           </p>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <div class="container split-heading ttx-dialect-heading">
+      <p class="container subheader">The shared vocabulary</p>
+      <div class="container section-heading section-heading-split">
         <div>
-          <p class="subheader">Semi-common, not normalized</p>
           <h2 class="two-tone-title">
-            <span>One Lexicon</span>
-            <span>Several semantic owners</span>
+            <span>Stable contracts</span>
+            <span>Open-ended concepts</span>
           </h2>
         </div>
         <p>
-          Shared spellings make the family readable as one system, while each Dialect
-          still owns its grammar, completion rules, semantic identities, and
-          persistent meaning.
+          TTX does not prescribe a complete language model or cap the semantics
+          another owner may expose. Shared contracts remain stable while named
+          concepts let the federation grow without a universal node schema.
         </p>
       </div>
 
-      <div class="container dialect-grid">
+      <div class="container grid columns-2 section-content">
+        {contracts.map((contract) => (
+          <article class="card">
+            <span>{contract.label}</span>
+            <h3>{contract.title}</h3>
+            <p>{contract.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section section-bordered">
+      <p class="container subheader">Bundled languages built on TTX</p>
+      <div class="container section-heading section-heading-split">
+        <div>
+          <h2 class="two-tone-title">
+            <span>Familiar source</span>
+            <span>Distinct semantic owners</span>
+          </h2>
+        </div>
+        <p>
+          Each bundled language is installed as a Dialect. They share selected
+          source conventions, but common spelling is not common ownership.
+          Each Dialect keeps its grammar, semantic identities, partial
+          projections, and persistent behavior.
+        </p>
+      </div>
+
+      <div class="container grid columns-3 section-content">
         {
           dialects.map((dialect) => (
-            <article class="dialect-card">
+            <article class="card">
               <span>{dialect.label}</span>
               <h3>{dialect.title}</h3>
               <p>{dialect.copy}</p>
@@ -155,12 +266,63 @@ const dialects = [
           ))
         }
       </div>
+
+      <a class="container future-language" href="/docs/design/">
+        <span>Complete design journey</span>
+        <p>
+          Follow the toolchain problem through living graphs, opaque
+          projections, semantic reconstruction, cross-language cooperation,
+          and the self-hosting horizon →
+        </p>
+      </a>
     </section>
 
-    <section id="multiple-scenes" class="section section-bordered">
-      <div class="container split-heading scene-heading">
+    <section id="echo" class="section">
+      <p class="container subheader">One small product, the complete path</p>
+      <div class="container section-heading section-heading-split">
         <div>
-          <p class="subheader">A small App with room to grow</p>
+          <h2 class="two-tone-title">
+            <span>Start with terminal Echo</span>
+            <span>Keep the graph visible</span>
+          </h2>
+        </div>
+        <p>
+          Echo is deliberately ordinary. Package groups the sources, App names
+          one entry callable, Library owns the loop, Build selects providers,
+          and Environment loads them from the installed SDK.
+        </p>
+      </div>
+
+      <div class="container source-sample">
+        <div>
+          <span>Echo · Library behavior</span>
+          <p>
+            The same `run` identity serves hover, navigation, Package
+            reconstruction, LLVM compilation, and the final executable. No
+            consumer receives a copied declaration.
+          </p>
+          <a class="button button-primary" href="/docs/getting-started/">
+            Getting Started
+          </a>
+          <a class="button button-secondary" href={SITE.ttxExamples}>
+            Browse the canonical sources
+          </a>
+        </div>
+        <pre class="ttx-code" aria-label="Echo Library source"><code><span data-token="keyword">dialect</span> <span data-token="accessor">:</span> <span data-token="type">Library</span><span data-token="punctuation">;</span>
+
+<span data-token="visibility">public</span> run <span data-token="accessor">:</span> <span data-token="keyword">func</span> <span data-token="operator">=</span> [] <span data-token="accessor">-&gt;</span> [] <span data-token="punctuation">&lbrace;</span>
+  <span data-token="control">while</span> <span data-token="constant">true</span> <span data-token="punctuation">&lbrace;</span>
+    <span data-token="policy">state</span> line <span data-token="operator">:=</span> System<span data-token="accessor">::</span>Terminal <span data-token="accessor">-&gt;</span> read_line<span data-token="punctuation">()</span><span data-token="operator">?</span><span data-token="punctuation">;</span>
+    System<span data-token="accessor">::</span>Terminal <span data-token="accessor">-&gt;</span> write_line<span data-token="punctuation">(</span>line<span data-token="punctuation">)</span><span data-token="operator">?</span><span data-token="punctuation">;</span>
+  <span data-token="punctuation">&rbrace;</span>
+<span data-token="punctuation">&rbrace;</span></code></pre>
+      </div>
+    </section>
+
+    <section id="multiple-scenes" class="section">
+      <p class="container subheader">A small App with room to grow</p>
+      <div class="container section-heading section-heading-split">
+        <div>
           <h2 class="two-tone-title">
             <span>Keep Scenes focused</span>
             <span>Let App connect them</span>
@@ -234,36 +396,36 @@ const dialects = [
       </div>
 
       <div
-        class="container scene-graph-diagram"
-        aria-label="Package, App, Home Scene, and Settings Scene join one Workspace that feeds editor, Archive, and native application products"
+        class="container diagram inset-shadow scene-graph-diagram"
+        aria-label="Package, App, Home Scene, and Settings Scene join one Workspace that feeds editor, Package reconstruction, and native application products"
       >
         <div class="scene-graph-column">
           <p>Sources</p>
-          <div class="scene-node">
+          <div class="diagram-panel scene-node">
             <small>Package Dialect</small>
             <strong>package.ttx</strong>
             <span>Publishes the App</span>
           </div>
-          <div class="scene-node">
+          <div class="diagram-panel scene-node">
             <small>App Dialect</small>
             <strong>app.ttx</strong>
             <span>Window + navigation</span>
           </div>
-          <div class="scene-node">
+          <div class="diagram-panel scene-node">
             <small>Scene Dialect</small>
             <strong>home.ttx</strong>
             <span>Home state + open_settings</span>
           </div>
-          <div class="scene-node">
+          <div class="diagram-panel scene-node">
             <small>Scene Dialect</small>
             <strong>settings.ttx</strong>
             <span>Settings state + done</span>
           </div>
         </div>
 
-        <div class="scene-graph-arrow" aria-hidden="true">→</div>
+        <div class="diagram-arrow" aria-hidden="true">→</div>
 
-        <div class="scene-semantic-graph">
+        <div class="diagram-panel accent-panel scene-semantic-graph">
           <small>Shared Workspace</small>
           <strong>Multiple Scenes</strong>
           <div class="semantic-layer">
@@ -284,21 +446,21 @@ const dialects = [
           </div>
         </div>
 
-        <div class="scene-graph-arrow" aria-hidden="true">→</div>
+        <div class="diagram-arrow" aria-hidden="true">→</div>
 
         <div class="scene-graph-column scene-consumers">
           <p>Ready for</p>
-          <div class="scene-node">
+          <div class="diagram-panel scene-node">
             <small>Puffer</small>
             <strong>Live editing</strong>
             <span>Every source in context</span>
           </div>
-          <div class="scene-node">
+          <div class="diagram-panel scene-node">
             <small>Package</small>
-            <strong>Semantic Archive</strong>
+            <strong>Semantic reconstruction</strong>
             <span>The connected Package graph</span>
           </div>
-          <div class="scene-node">
+          <div class="diagram-panel scene-node">
             <small>Application + Linker</small>
             <strong>Native application</strong>
             <span>The experience people run</span>
@@ -312,13 +474,14 @@ const dialects = [
         <div class="ttx-callout-copy">
           <p class="subheader">The graph is larger than TTX</p>
           <h2 class="two-tone-title">
-            <span>Grow the TTX family</span>
+            <span>Extend the federation</span>
             <span>Bring another language</span>
           </h2>
           <p>
-            Some domains fit naturally inside TTX. A new Dialect can share the
-            family's Lexicon, Packages, and tooling while giving its users a
-            source language shaped around their work.
+            Some domains benefit from the source conventions shared by the
+            bundled languages. A new Dialect can reuse those conventions,
+            Packages, and tooling while giving its users a language shaped
+            around their work.
           </p>
           <p>
             Other languages arrive with a history worth keeping. C is the first

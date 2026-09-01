@@ -1,48 +1,26 @@
 ---
 import type { MarkdownLayoutProps } from 'astro';
 import BaseLayout from './BaseLayout.astro';
-import { docsNavigation } from '../data/site';
+import DocsSidebar from '../components/DocsSidebar.astro';
 
 type Frontmatter = {
   title: string;
   description: string;
-  subheader?: string;
 };
 
 type Props = MarkdownLayoutProps<Frontmatter>;
 
 const { frontmatter } = Astro.props;
-const pathname = Astro.url.pathname;
 ---
 
 <BaseLayout title={frontmatter.title + ' · Tetrodotoxin Docs'} description={frontmatter.description}>
   <main id="main" class="docs-main">
     <div class="container docs-shell">
-      <aside class="docs-sidebar">
-        <div>
-          <span>Documentation</span>
-          <strong>Learn Tetrodotoxin</strong>
-        </div>
-        <nav aria-label="Documentation navigation">
-          {
-            docsNavigation.map((item) => (
-              <a href={item.href} aria-current={pathname === item.href ? 'page' : undefined}>
-                {item.label}
-              </a>
-            ))
-          }
-        </nav>
-        <a class="docs-source" href="https://github.com/tetrodotoxin-dev/Tetrodotoxin">
-          Browse the source
-          <span aria-hidden="true">↗</span>
-        </a>
-      </aside>
+      <DocsSidebar />
 
       <article class="docs-content">
         <header class="docs-header">
-          <p class="subheader">{frontmatter.subheader ?? 'Documentation'}</p>
-          <h1>{frontmatter.title}</h1>
-          <p>{frontmatter.description}</p>
+          <h1 class="accent">{frontmatter.title}</h1>
         </header>
         <div class="prose">
           <slot />

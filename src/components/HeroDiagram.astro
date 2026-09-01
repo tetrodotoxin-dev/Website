@@ -1,0 +1,43 @@
+---
+type DiagramLayer =
+  | { kind: 'nodes'; items: string[] }
+  | { kind: 'content'; eyebrow: string; title: string; detail?: string };
+
+interface Props {
+  label: string;
+  description: string;
+  layers: [DiagramLayer, DiagramLayer, DiagramLayer];
+  connectors: [string, string];
+}
+
+const { label, description, layers, connectors } = Astro.props;
+---
+
+<div class="hero-diagram" role="img" aria-label={description}>
+  <p class="hero-diagram-label">{label}</p>
+  {
+    layers.map((layer, index) => (
+      <>
+        <div class="hero-diagram-layer">
+          {layer.kind === 'nodes' ? (
+            <div class="hero-diagram-nodes" data-count={layer.items.length}>
+              {layer.items.map((item) => <span>{item}</span>)}
+            </div>
+          ) : (
+            <div class="hero-diagram-content">
+              <small>{layer.eyebrow}</small>
+              <strong>{layer.title}</strong>
+              {layer.detail && <span>{layer.detail}</span>}
+            </div>
+          )}
+        </div>
+        {index < layers.length - 1 && (
+          <div class="hero-diagram-connector" aria-hidden="true">
+            <span>↓</span>
+            <small>{connectors[index]}</small>
+          </div>
+        )}
+      </>
+    ))
+  }
+</div>

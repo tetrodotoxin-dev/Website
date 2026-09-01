@@ -1,0 +1,51 @@
+---
+import { docsNavigation } from '../data/site';
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  pathname === href || (href !== '/docs/' && pathname.startsWith(href));
+---
+
+<aside class="docs-sidebar">
+  <div>
+    <span>Documentation</span>
+    <strong>Learn Tetrodotoxin</strong>
+  </div>
+  <nav aria-label="Documentation navigation">
+    {
+      docsNavigation.map((item) => (
+        'children' in item ? (
+          <div class="docs-navigation-group">
+            <details
+              class:list={['navigation-disclosure', { 'navigation-disclosure-active': isActive(item.href) }]}
+              open={isActive(item.href)}
+            >
+              <summary>{item.label}</summary>
+              <div class="navigation-children docs-navigation-subtree">
+                <a href={item.href} aria-current={pathname === item.href ? 'page' : undefined}>
+                  <span aria-hidden="true"></span>
+                  Background
+                </a>
+                {item.children.map((child) => (
+                  <a href={child.href} aria-current={pathname === child.href ? 'page' : undefined}>
+                    <span>{child.number}</span>
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            </details>
+          </div>
+        ) : (
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        )
+      ))
+    }
+  </nav>
+  <slot />
+  <a class="docs-source" href="https://github.com/tetrodotoxin-dev/Tetrodotoxin">
+    Browse the source
+    <span aria-hidden="true">↗</span>
+  </a>
+</aside>

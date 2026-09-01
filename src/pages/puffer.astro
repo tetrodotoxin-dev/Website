@@ -1,105 +1,99 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE } from '../data/site';
+import HeroDiagram from '../components/HeroDiagram.astro';
 
 const capabilities = [
   {
     label: 'Editor',
-    title: 'Explore the real graph',
-    copy: 'Hover, navigation, completion, highlighting, and formatting follow the identities and documentation the Dialect already created.',
+    title: 'Use the strongest partial graph',
+    copy: 'Hover, navigation, completion, highlighting, and formatting follow the identities and documentation each language can currently establish, keeping a half-typed declaration useful without an editor-only symbol record.',
   },
   {
     label: 'Products',
-    title: 'Choose what the build needs',
-    copy: 'Ask for native code, GPU modules, Archives, or another Terminal product when the completed Package is ready to produce it.',
+    title: 'Let each product set the threshold',
+    copy: 'Package defaults to its archive while Build maps its own inputs to provider identities for native code, bindings, Graph Text, or another independent projection.',
   },
   {
-    label: 'Sessions',
-    title: 'One path for every caller',
-    copy: 'Editors, terminals, and larger build systems can share one request path instead of carrying their own Package and compiler policy.',
+    label: 'Boundary',
+    title: 'Coordinate without taking ownership',
+    copy: 'Puffer carries arguments and host observations into the graph while the selected language and its product providers retain every semantic decision.',
   },
 ];
 ---
 
 <BaseLayout
-  title="Puffer · The complete Tetrodotoxin application"
-  description="Puffer is Tetrodotoxin's all-in-one compiler driver, Workspace host, command interface, and language server."
+  title="Puffer · One source, one graph, selected products"
+  description="Puffer is the small executable entry point that opens one Tetrodotoxin source graph for command-line production or editor tooling."
 >
   <main id="main">
     <section class="hero puffer-hero">
       <div class="container hero-content">
         <div class="hero-heading">
-          <p class="subheader">Keep the whole project within reach</p>
+          <p class="subheader">A small front door to the toolchain</p>
           <h1 class="two-tone-title">
-            <span>One front door</span>
-            <span>For the whole toolchain</span>
+            <span>One root source</span>
+            <span>One living graph</span>
           </h1>
         </div>
 
         <div class="hero-support">
           <div class="hero-copy">
             <p class="hero-summary">
-              Open a Package once and keep the whole journey connected. Follow
-              its meaning across every source, then build the products that
-              belong to it without assembling another toolchain around the
-              language.
+              Puffer is the executable entry point to a Tetrodotoxin
+              toolchain. Give it one source file and it opens the language
+              declared by that source, keeps the resulting graph alive for the
+              command or editor session, and publishes the outputs that graph
+              requests. Puffer does not need a command mode for every language
+              because the source already identifies the owner of the request.
             </p>
             <div class="button-row">
-              <a class="button button-primary" href={SITE.puffer}>
-                Browse Puffer
+              <a class="button button-primary" href="/docs/getting-started/">
+                Getting Started
               </a>
               <a class="button button-secondary" href="/docs/core-concepts/">
-                Platform guide
+                Core concepts
               </a>
             </div>
           </div>
 
-          <div class="puffer-journey" aria-label="Editor, command line, and build system requests enter a Puffer session, use Tetrodotoxin owners, and return diagnostics or completed products">
-            <p>Puffer request path</p>
-            <div class="puffer-inputs">
-              <span>Editor</span>
-              <span>Command line</span>
-              <span>Build system</span>
-            </div>
-            <div class="puffer-arrow" aria-hidden="true">↓</div>
-            <div class="puffer-session">
-              <small>One connected request path</small>
-              <strong>Puffer session</strong>
-            </div>
-            <div class="puffer-arrow" aria-hidden="true">↓</div>
-            <div class="puffer-owners">
-              <span>Workspace</span>
-              <span>Package</span>
-              <span>Dialects</span>
-              <span>Terminals</span>
-              <span>Linker</span>
-            </div>
-            <div class="puffer-arrow" aria-hidden="true">↓</div>
-            <div class="puffer-result">Diagnostics or completed products</div>
-          </div>
+          <HeroDiagram
+            label="Puffer request path"
+            description="One root source or language-server pipe enters Puffer. The selected language and its providers determine the resulting graph and products."
+            connectors={['opens one session', 'returns selected results']}
+            layers={[
+              { kind: 'nodes', items: ['source.ttx', 'build.ttx', 'LSP pipe'] },
+              {
+                kind: 'content',
+                eyebrow: 'One connected request path',
+                title: 'Puffer session',
+                detail: 'Source · Graph · Diagnostics · Publication',
+              },
+              { kind: 'nodes', items: ['Diagnostics', 'Reusable package', 'Build outputs'] },
+            ]}
+          />
         </div>
       </div>
     </section>
 
     <section class="section section-bordered">
       <div class="container section-heading">
-        <p class="subheader">From first edit to finished product</p>
         <h2 class="two-tone-title">
           <span>Understand the source</span>
           <span>Then build from it</span>
         </h2>
         <p>
-          A new Dialect can feel useful as soon as it joins the Workspace.
-          Puffer brings its identities into the editor and the build, so authors
-          can spend their time shaping the language instead of rebuilding the
-          toolchain around it.
+          A Package source describes what belongs together without choosing a
+          host, while a Build source selects what one invocation should produce
+          from the providers, repositories, target, and output paths supplied by
+          its Environment. Puffer coordinates those owners without replacing
+          any of them.
         </p>
       </div>
 
-      <div class="container principle-grid">
+      <div class="container grid columns-3 section-content">
         {
           capabilities.map((capability) => (
-            <article class="principle-card">
+            <article class="card card-plain">
               <span>{capability.label}</span>
               <h3>{capability.title}</h3>
               <p>{capability.copy}</p>
@@ -109,24 +103,74 @@ const capabilities = [
       </div>
     </section>
 
-    <section class="section">
+    <section id="command-surface" class="section">
+      <p class="container subheader">The complete command surface</p>
+      <div class="container section-heading section-heading-split">
+        <div>
+          <h2 class="two-tone-title">
+          <span>One transport boundary</span>
+          <span>Every argument belongs somewhere</span>
+          </h2>
+        </div>
+        <p>
+          Puffer recognizes only a source invocation or an LSP transport because
+          the selected language, called a Dialect inside Tetrodotoxin, owns all
+          source-mode arguments. New profiles and products therefore do not
+          expand the application shell.
+        </p>
+      </div>
+
+      <div class="container puffer-contract">
+        <pre aria-label="Puffer command forms"><code>puffer &lt;source.ttx&gt; [dialect arguments...]
+puffer -lsp=&lt;pipe-name&gt;</code></pre>
+        <div>
+          <span>Source-owned defaults</span>
+          <code>puffer package.ttx</code>
+          <code>puffer build.ttx</code>
+          <code>puffer build.ttx release</code>
+        </div>
+      </div>
+
+      <div class="container grid columns-3 section-content">
+        <article class="card card-plain">
+          <small>Puffer owns</small>
+          <strong>The request</strong>
+          <p>CLI and LSP transport, immutable invocation observations, diagnostics, and atomic publication.</p>
+        </article>
+        <article class="card card-plain">
+          <small>Build + Environment own</small>
+          <strong>The meaning of the request</strong>
+          <p>Argument schema, defaults, Package root, plugins, provider selection, target observations, and product requirements.</p>
+        </article>
+        <article class="card card-plain">
+          <small>Terminals own</small>
+          <strong>The representation</strong>
+          <p>
+            A Terminal is an output provider for Graph Text, generated bindings,
+            native code, GPU modules, or Package archives, each with its own
+            certainty and representation.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-bordered">
       <div class="container callout">
         <div>
-          <p class="subheader">Complete when you want it</p>
+          <p class="subheader">One SDK, the same bootstrap</p>
           <h2 class="two-tone-title">
-            <span>Start with the whole experience</span>
-            <span>Keep every layer replaceable</span>
+            <span>Build from the command line</span>
+            <span>Edit through the same providers</span>
           </h2>
           <p>
-            Puffer can meet a project as its editor host, command interface, and
-            build front door together. When a product wants a different shell,
-            the Tetrodotoxin libraries remain available underneath it, keeping
-            the same Package, compiler, Linker, and Archive behavior while the
-            experience changes around them.
+            The VS Code extension owns transport and presentation while using
+            the installed Puffer SDK to locate the workspace Build root and load
+            the same declared Dialect plugins, avoiding another semantic model
+            or provider inventory.
           </p>
         </div>
-        <a class="button button-primary" href={SITE.puffer}>
-          Explore Puffer
+        <a class="button button-primary" href="/docs/getting-started/">
+          Install the SDK
         </a>
       </div>
     </section>

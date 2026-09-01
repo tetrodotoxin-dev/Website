@@ -1,0 +1,58 @@
+---
+import type { MarkdownLayoutProps } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import DocsSidebar from '../components/DocsSidebar.astro';
+import { designNavigation } from '../data/site';
+
+type Frontmatter = {
+  title: string;
+  description: string;
+  steps?: Array<{
+    number: string;
+    title: string;
+    id: string;
+  }>;
+};
+
+type Props = MarkdownLayoutProps<Frontmatter>;
+
+const { frontmatter } = Astro.props;
+const pathname = Astro.url.pathname;
+const currentIndex = designNavigation.findIndex((item) => item.href === pathname);
+const previous = currentIndex > 0 ? designNavigation[currentIndex - 1] : undefined;
+const next = currentIndex >= 0 && currentIndex + 1 < designNavigation.length
+  ? designNavigation[currentIndex + 1]
+  : undefined;
+---
+
+<BaseLayout title={`${frontmatter.title} · Tetrodotoxin Design`} description={frontmatter.description}>
+  <main id="main" class="docs-main">
+    <div class="container docs-shell">
+      <DocsSidebar />
+      <article class="docs-content">
+        <header class="docs-header">
+          <h1 class="accent">{frontmatter.title}</h1>
+        </header>
+        {frontmatter.steps && (
+          <nav class="step-index rabbit-step-index" aria-label={`${frontmatter.title} steps`}>
+            <ol>
+              {frontmatter.steps.map((step) => (
+                <li>
+                  <a href={`#${step.id}`}>
+                    <span>{step.number}</span>
+                    {step.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+        <div class="prose rabbit-prose"><slot /></div>
+        <nav class="adjacent-navigation rabbit-chapter-navigation" aria-label="Adjacent Design concepts">
+          {previous ? <a href={previous.href}><small>Previous</small><span>← {previous.label}</span></a> : <span />}
+          {next && <a href={next.href}><small>Next</small><span>{next.label} →</span></a>}
+        </nav>
+      </article>
+    </div>
+  </main>
+</BaseLayout>

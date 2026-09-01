@@ -1,47 +1,45 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroDiagram from '../components/HeroDiagram.astro';
 import { SITE } from '../data/site';
 
 const principles = [
   {
-    number: '01',
-    title: 'Speak in the domain',
-    copy: 'Packages, scenes, shaders, and application logic keep the concepts that make each language useful.',
+    title: 'Keep meaning with its language',
+    copy: 'Scenes keep lifecycle, shaders keep GPU behavior, and build descriptions keep infrastructure policy, so cooperation does not flatten those ideas into one generic model.',
   },
   {
-    number: '02',
-    title: 'Share the real identity',
-    copy: 'Editors, compilers, and build tools meet the same semantic objects instead of synchronizing copies.',
+    title: 'Let every tool ask the same owner',
+    copy: 'Editors, compilers, package tools, and runtimes work from the same semantic identities instead of synchronizing their own copies of the program.',
   },
   {
-    number: '03',
-    title: 'Choose the product',
-    copy: 'Native code, GPU modules, archives, and tooling views emerge only when a Terminal needs them.',
+    title: 'Generate each representation when needed',
+    copy: 'Native code, GPU modules, reusable packages, bindings, and tooling views remain independent outputs for the consumers that need them.',
   },
 ];
 
 const surfaces = [
   {
     label: 'Language',
-    title: 'Skip the one-off toolchain',
-    copy: 'A DSL keeps its own grammar and semantic model while reusing source handling, diagnostics, Packages, editor sessions, and compilation infrastructure.',
+    title: 'Keep specialized language design',
+    copy: 'Whether using a bundled language or bringing an existing one, each keeps the grammar and semantics that make it useful while participating in the same product.',
   },
   {
-    label: 'Graph',
-    title: 'Compose semantics out of the box',
-    copy: 'Source imports, Package dependencies, embedded resources, and cross-language relationships meet in one completed graph instead of another linker and symbol model.',
+    label: 'Tools',
+    title: 'Reuse one understanding',
+    copy: 'A name, relationship, or incomplete declaration stays connected to its real owner, so editors and compilers do not need parallel symbol and dependency models.',
   },
   {
-    label: 'Products',
-    title: 'Add the Terminal you need',
-    copy: 'Select the product formats a build needs or extend the output side without pushing target representation into every source language.',
+    label: 'Outputs',
+    title: 'Serve each consumer honestly',
+    copy: 'A compiler, binding generator, package publisher, or custom tool derives the representation its consumer needs without making every language adopt it.',
   },
 ];
 ---
 
 <BaseLayout
   title={SITE.title}
-  description="Purpose-built languages sharing one semantic workspace and one complete toolchain."
+  description="Purpose-built languages sharing one living semantic Workspace and one connected toolchain."
 >
   <main id="main">
     <section class="hero">
@@ -57,63 +55,60 @@ const surfaces = [
         <div class="hero-support">
           <div class="hero-copy">
             <p class="hero-summary">
-              Tetrodotoxin lets every domain keep the meaning that makes it useful
-              while taking part in one semantic workspace, one package graph, and
-              one toolchain.
+              Tetrodotoxin is a platform for building software from several
+              purpose-built languages without assembling a separate toolchain
+              around each one. Source code, editor tools, packages, compilers,
+              and runtimes work from the same understanding of the program
+              instead of maintaining their own copies. Use the included
+              language family or bring an existing language, then produce
+              native applications, GPU programs, bindings, and reusable
+              packages through one connected system.
             </p>
             <div class="button-row">
-              <a class="button button-primary" href="/docs/">
-                Explore the docs
+              <a class="button button-primary" href="/docs/getting-started/">
+                Getting Started
               </a>
-              <a class="button button-secondary" href={SITE.github}>
-                View on GitHub
+              <a class="button button-secondary" href="/docs/design/">
+                Understand why
               </a>
             </div>
           </div>
 
-          <div class="system-map" aria-label="Dialects join one semantic Workspace, which feeds independent Terminals">
-            <img src="/brand/logo.svg" alt="Tetrodotoxin Toolchain" />
-            <div class="map-dialects" aria-label="Example Dialects">
-              <span>Package</span>
-              <span>Library</span>
-              <span>Scene</span>
-              <span>Shader</span>
-            </div>
-            <div class="map-arrow" aria-hidden="true">↓</div>
-            <div class="map-workspace">
-              <small>Shared meaning</small>
-              <strong>Semantic Workspace</strong>
-              <span>Identity · TTX · Documentation</span>
-            </div>
-            <div class="map-arrow" aria-hidden="true">↓</div>
-            <div class="map-terminals" aria-label="Example Terminal products">
-              <span>Native</span>
-              <span>SPIR-V</span>
-              <span>Archive</span>
-              <span>Format</span>
-            </div>
-          </div>
+          <HeroDiagram
+            label="Connected toolchain"
+            description="Purpose-built languages contribute meaning to one shared understanding, which independent tools turn into the outputs their consumers need."
+            connectors={['share meaning', 'produce independently']}
+            layers={[
+              { kind: 'nodes', items: ['Application', 'Scene', 'Shader', 'Build description'] },
+              {
+                kind: 'content',
+                eyebrow: 'One connected understanding',
+                title: 'Living semantic graph',
+                detail: 'Identity · Relationships · Partial meaning',
+              },
+              { kind: 'nodes', items: ['Executable', 'GPU module', 'Reusable package', 'Bindings'] },
+            ]}
+          />
         </div>
       </div>
     </section>
 
-    <section class="section section-bordered">
+    <section class="section section-bordered section-end-compact">
       <div class="container section-heading">
-        <p class="subheader">One Central Philosophy</p>
         <h2>Specialization without fragmentation</h2>
         <p>
           A domain should not have to choose between a generic data file and an
-          isolated toolchain. Tetrodotoxin connects concrete languages through
-          the meaning they genuinely share.
+          isolated toolchain. Tetrodotoxin lets concrete languages keep their
+          own meaning while their tools meet around the parts they genuinely
+          share.
         </p>
       </div>
 
-      <div class="container principle-grid">
+      <div class="container grid columns-3 section-content">
         {
           principles.map((principle) => (
-            <article class="principle-card">
-              <span>{principle.number}</span>
-              <h3>{principle.title}</h3>
+            <article class="card card-plain">
+              <h3 class="accent">{principle.title}</h3>
               <p>{principle.copy}</p>
             </article>
           ))
@@ -122,24 +117,25 @@ const surfaces = [
     </section>
 
     <section class="section">
-      <div class="container split-heading extension-heading">
+      <p class="container subheader">Extension without reinvention</p>
+      <div class="container section-heading section-heading-split">
         <div>
-          <p class="subheader">Extension without reinvention</p>
           <h2 class="two-tone-title">
             <span>Bring a language</span>
             <span>Reuse the toolchain</span>
           </h2>
         </div>
         <p>
-          Dialects add source meaning, Terminals add products, and the completed
-          Workspace gives both sides one semantic graph to build on.
+          A language contributes the meaning it owns so editors, package tools,
+          compilers, and runtimes can reuse it without translating the complete
+          language into another common model.
         </p>
       </div>
 
-      <div class="container surface-grid">
+      <div class="container grid columns-3 section-content">
         {
           surfaces.map((surface) => (
-            <article class="surface-card">
+            <article class="card">
               <span>{surface.label}</span>
               <h3>{surface.title}</h3>
               <p>{surface.copy}</p>
@@ -150,98 +146,99 @@ const surfaces = [
     </section>
 
     <section id="integration" class="section section-bordered">
-      <div class="container split-heading integration-heading">
+      <p class="container subheader">Infrastructure is authored too</p>
+      <div class="container section-heading section-heading-split">
         <div>
-          <p class="subheader">Bring your own toolchain</p>
           <h2 class="two-tone-title">
-            <span>One graph to connect</span>
-            <span>all your semantic needs</span>
+          <span>Describe the product</span>
+          <span>Configure its production</span>
           </h2>
         </div>
         <p>
-          Tetrodotoxin can sit between the tools that understand your inputs and
-          the producers that create your products. Neither side has to become a
-          compiler frontend or native code generator to participate.
+          Tetrodotoxin gives each role a precise name. A Package describes the
+          host-independent product, while a Build selects what one invocation
+          should create from the providers, target, repositories, and confined
+          output paths supplied by its Environment. Tetrodotoxin calls an
+          installed language a Dialect, the living graph for one product a
+          Workspace, and an independent output provider a Terminal so these
+          responsibilities remain separate owners rather than modes in one
+          compiler driver.
         </p>
       </div>
 
       <div
-        class="container pipeline-diagram"
-        aria-label="Library, Shader, PNG, and custom Dialects join one semantic Workspace and feed native, graphics, archive, and custom Terminal products"
+        class="container diagram inset-shadow pipeline-diagram"
+        aria-label="Package and Build sources enter one Environment configured Workspace and feed independent Terminal products"
       >
         <div class="pipeline-stage pipeline-inputs">
-          <p>Inputs</p>
-          <div class="pipeline-node">
-            <small>TTX Library Dialect</small>
-            <strong>Library Source</strong>
+          <p>Authored roots</p>
+          <div class="diagram-panel pipeline-node">
+            <small>Package Dialect</small>
+            <strong>package.ttx</strong>
           </div>
-          <div class="pipeline-node">
-            <small>TTX Shader Dialect</small>
-            <strong>Shader Source</strong>
+          <div class="diagram-panel pipeline-node">
+            <small>Build Dialect</small>
+            <strong>build.ttx</strong>
           </div>
-          <div class="pipeline-node">
-            <small>PNG Dialect</small>
-            <strong>Images + embedded data</strong>
+          <div class="diagram-panel pipeline-node">
+            <small>Invocation input</small>
+            <strong>Dialect-owned arguments</strong>
           </div>
-          <div class="pipeline-node">
-            <small>Your Dialect</small>
-            <strong>Custom text or bytes</strong>
+          <div class="diagram-panel pipeline-node">
+            <small>Puffer SDK</small>
+            <strong>Explicit provider plugins</strong>
           </div>
         </div>
 
-        <div class="pipeline-arrow" aria-hidden="true">→</div>
+        <div class="diagram-arrow" aria-hidden="true">→</div>
 
-        <div class="pipeline-core">
-          <small>Toolchain + Environment</small>
-          <strong>Completed semantic Workspace</strong>
-          <span>Types · References · Resources · Interfaces</span>
+        <div class="diagram-panel accent-panel pipeline-core">
+          <small>Environment-owned toolchain</small>
+          <strong>Living Package Workspace</strong>
+          <span>Semantic graph · Requested products · Selected providers</span>
         </div>
 
-        <div class="pipeline-arrow" aria-hidden="true">→</div>
+        <div class="diagram-arrow" aria-hidden="true">→</div>
 
         <div class="pipeline-stage pipeline-outputs">
           <p>Terminal products</p>
-          <div class="pipeline-node">
-            <small>ABI + LLVM</small>
-            <strong>C interface + CPU objects</strong>
+          <div class="diagram-panel pipeline-node">
+            <small>Native provider</small>
+            <strong>Executable or library</strong>
           </div>
-          <div class="pipeline-node">
+          <div class="diagram-panel pipeline-node">
             <small>Vulkan</small>
             <strong>SPIR-V + pipeline description</strong>
           </div>
-          <div class="pipeline-node">
-            <small>Package</small>
-            <strong>Semantic Archive</strong>
+          <div class="diagram-panel pipeline-node">
+            <small>Package Terminal</small>
+            <strong>Source-free semantic graph</strong>
           </div>
-          <div class="pipeline-node">
+          <div class="diagram-panel pipeline-node">
             <small>Custom Terminal</small>
             <strong>Image, data, or another format</strong>
           </div>
         </div>
       </div>
 
-      <div class="container integration-points">
-        <article>
-          <small>Frontend</small>
-          <span>Unbounded inputs</span>
+      <div class="container grid columns-3 section-content">
+        <article class="card card-plain">
+          <small>Host-independent grouping</small>
           <p>
-            Inputs do not need to be source files. Interpret a language,
-            arbitrary text, embedded files, images, or any other input that can
-            contribute meaning to the graph.
+            Package owns coordinates, dependencies, exports, resources, and the
+            machinery needed to reconstruct its semantic graph without source.
           </p>
         </article>
-        <article>
-          <small>Middleware</small>
-          <span>Codegen-free tooling interop</span>
+        <article class="card card-plain">
+          <small>Build + Environment as code</small>
           <p>
-            Join compilers, graphics pipelines, editors, package managers, and other
-            toolchains through one graph without routing every integration
-            through native code generation.
+            Build maps invocation inputs to exact product providers while
+            Environment owns plugins, repositories, targets, and confined
+            publication roots.
           </p>
         </article>
-        <article>
-          <small>Backend</small>
-          <span>Outputs beyond programs</span>
+        <article class="card card-plain">
+          <small>Terminal outputs</small>
           <p>
             Generate images, data files, reports, archives, or any other format
             a Terminal can derive without teaching every Dialect about that
@@ -252,40 +249,59 @@ const surfaces = [
 
       <div class="container ecosystem-panel">
         <div>
-          <p class="subheader">The LLVM ecosystem comes with you</p>
-          <h3>Existing toolchains remain first-class</h3>
+          <p class="subheader">One installed Puffer SDK</p>
+          <h3>Bootstrap explicitly, then replace any provider</h3>
           <p>
-            The native path projects a C-compatible ABI, emits LLVM IR and
-            objects, links with LLD, and carries source correlation into LLDB.
-            Bazel can wrap the same Puffer build request. In parallel, Vulkan
-            derives SPIR-V and its CPU pipeline description from the completed
-            Shader, Render, and Library graph without passing through LLVM.
+            The SDK supplies bootstrap Build, Environment, and Package Dialects
+            alongside standard provider plugins, Packages, the native runtime,
+            and the VS Code extension. Because a starter Build imports only the
+            providers it uses, another plugin can satisfy the same semantic
+            contract without changing Puffer.
           </p>
         </div>
-        <div class="ecosystem-tools" aria-label="Existing toolchain integrations">
-          <span>C ABI</span>
+        <div class="chip-grid ecosystem-tools" aria-label="Existing toolchain integrations">
+          <span>Build</span>
+          <span>Environment</span>
+          <span>Package</span>
           <span>LLVM</span>
-          <span>LLD</span>
-          <span>LLDB</span>
-          <span>Bazel</span>
-          <span>Vulkan + SPIR-V</span>
+          <span>Vulkan</span>
+          <span>VS Code</span>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container callout">
-        <div>
-          <p class="subheader">Start with the why</p>
-          <h2>See how the pieces fit together.</h2>
+    <section class="section section-bordered">
+      <div class="container section-heading">
+        <h2 class="two-tone-title">
+          <span>Build something first</span>
+          <span>Follow the model as far as you want</span>
+        </h2>
+      </div>
+      <div class="container grid columns-2 homepage-paths section-content">
+        <article class="card homepage-path">
+          <p class="subheader">Start with a product</p>
+          <h2>Build the first application</h2>
           <p>
-            The documentation begins with the problem Tetrodotoxin solves, then
-            introduces the model and the vocabulary behind it.
+            Install the Puffer SDK, inspect the four small project sources, and
+            publish a native application with <code>puffer build.ttx</code>.
           </p>
-        </div>
-        <a class="button button-primary" href="/docs/core-concepts/">
-          Read the concepts
-        </a>
+          <a class="button button-primary" href="/docs/getting-started/">
+            Getting Started
+          </a>
+        </article>
+
+        <article class="card homepage-path">
+          <p class="subheader">Expand the Foundation</p>
+          <h2>Bootstrap from scratch</h2>
+          <p>
+            Learn the ownership rules, repository boundaries, and evidence
+            expected when a contribution carries the graph closer to the
+            documented architecture.
+          </p>
+          <a class="button button-secondary" href="/docs/development/">
+            Contribute
+          </a>
+        </article>
       </div>
     </section>
   </main>

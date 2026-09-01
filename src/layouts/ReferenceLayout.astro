@@ -1,6 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import { docsNavigation } from '../data/site';
+import DocsSidebar from '../components/DocsSidebar.astro';
 import {
   isReferenceType,
   packageReferenceHref,
@@ -23,24 +23,7 @@ const activeDocument = referencePackages.find((document) => document.package.nam
 <BaseLayout title={`${title} · Tetrodotoxin Docs`} description={description}>
   <main id="main" class="docs-main reference-main">
     <div class="container docs-shell reference-shell">
-      <aside class="docs-sidebar">
-        <div>
-          <span>Documentation</span>
-          <strong>Learn Tetrodotoxin</strong>
-        </div>
-        <nav aria-label="Documentation navigation">
-          {
-            docsNavigation.map((item) => (
-              <a
-                href={item.href}
-                aria-current={pathname === item.href || (item.href === '/docs/reference/' && pathname.startsWith(item.href)) ? 'page' : undefined}
-              >
-                {item.label}
-              </a>
-            ))
-          }
-        </nav>
-
+      <DocsSidebar>
         <div class="reference-sidebar-heading">
           <span>Generated reference</span>
           <strong>TTX packages</strong>
@@ -79,12 +62,7 @@ const activeDocument = referencePackages.find((document) => document.package.nam
             })
           }
         </nav>
-
-        <a class="docs-source" href="https://github.com/tetrodotoxin-dev/Tetrodotoxin/tree/tetrodotoxin-1.0/packages/ttx">
-          Browse the sources
-          <span aria-hidden="true">↗</span>
-        </a>
-      </aside>
+      </DocsSidebar>
 
       <article class="docs-content reference-content">
         <header class="docs-header">

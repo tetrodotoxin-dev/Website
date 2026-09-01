@@ -5,7 +5,7 @@ import { SITE } from '../data/site';
 
 <BaseLayout
   title="Download Tetrodotoxin"
-  description="Tetrodotoxin releases will be published through the project GitHub repository."
+  description="Find Tetrodotoxin source, releases, and release notes on GitHub."
 >
   <main id="main" class="simple-page">
     <div class="container">
@@ -14,11 +14,12 @@ import { SITE } from '../data/site';
           <img src="/brand/icon.svg" alt="" />
         </div>
         <p class="subheader">Downloads</p>
-        <h1>Releases will live on GitHub.</h1>
+        <h1>Get Tetrodotoxin from GitHub</h1>
         <p class="release-summary">
-          Tetrodotoxin does not have a public release yet. When the first build
-          is ready, release notes and downloadable artifacts will appear on the
-          project’s GitHub Releases page.
+          The Puffer SDK release keeps the bootstrap executable, standard
+          Dialect and Terminal plugins, Package repository, native providers,
+          and VS Code extension together. Use Releases for that complete SDK or
+          browse the repository to contribute to its owners.
         </p>
         <div class="button-row release-actions">
           <a class="button button-primary" href={SITE.releases}>
@@ -28,6 +29,10 @@ import { SITE } from '../data/site';
             Browse the source
           </a>
         </div>
+        <p class="release-summary">
+          After installation, continue with the
+          <a href="/docs/getting-started/">no-Bazel Echo quickstart</a>.
+        </p>
       </section>
     </div>
   </main>
