@@ -1,78 +1,61 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import DocsSidebar from '../components/DocsSidebar.astro';
+import ReferenceRouteTree from '../components/ReferenceRouteTree.astro';
 import {
-  isReferenceType,
-  packageReferenceHref,
-  referencePackages,
-  typeReferenceHref,
+  findNode,
+  graphHref,
+  referenceRouteTree,
+  referenceGraphs,
 } from '../data/reference';
 
 interface Props {
   title: string;
   description: string;
-  subheader?: string;
-  activePackage?: string;
+  activeGraph?: string;
 }
 
-const { title, description, subheader = 'TTX reference', activePackage } = Astro.props;
+const { title, description, activeGraph } = Astro.props;
 const pathname = Astro.url.pathname;
-const activeDocument = referencePackages.find((document) => document.package.name === activePackage);
 ---
 
 <BaseLayout title={`${title} · Tetrodotoxin Docs`} description={description}>
   <main id="main" class="docs-main reference-main">
     <div class="container docs-shell reference-shell">
       <DocsSidebar>
-        <div class="reference-sidebar-heading">
-          <span>Generated reference</span>
-          <strong>TTX packages</strong>
-        </div>
-        <nav class="reference-package-navigation" aria-label="TTX package reference">
-          {
-            referencePackages.map((document) => {
-              const packageHref = packageReferenceHref(document.package.name);
-              const expanded = activeDocument === document;
-              const types = document.sources.flatMap((source) =>
-                document.nodes.filter((node) => node.source === source.id && isReferenceType(node)),
-              );
-              return (
-                <div class:list={['reference-package-branch', { 'reference-package-active': expanded }]}>
-                  <a
-                    href={packageHref}
-                    aria-current={pathname === packageHref ? 'page' : undefined}
-                    aria-expanded={expanded ? 'true' : undefined}
-                  >
-                    {document.package.name.replace('Perimortem.', '')}
-                  </a>
-                  {expanded && types.length > 0 && (
-                    <div class="reference-package-tree reference-package-types">
-                      {types.map((node) => {
-                        const href = typeReferenceHref(document, node);
-                        return (
-                          <a href={href} aria-current={pathname === href ? 'page' : undefined}>
-                            {node.name}
-                          </a>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })
-          }
+        <div class="reference-sidebar-heading"><span>Generated reference</span><strong>Packages</strong></div>
+        <nav class="reference-package-navigation" aria-label="Package reference">
+          {referenceGraphs.map((graph) => {
+            const expanded = activeGraph === graph.slug;
+            const root = findNode(graph.root);
+            return (
+              <div class="reference-package-branch">
+                <details
+                  class:list={['navigation-disclosure', { 'navigation-disclosure-active': expanded }]}
+                  open={expanded}
+                >
+                  <summary>{root.displayName}</summary>
+                  <div class="navigation-children reference-package-children">
+                    <a
+                      class="reference-package-overview"
+                      href={graphHref(graph)}
+                      aria-current={pathname === graphHref(graph) ? 'page' : undefined}
+                    >Package overview</a>
+                    <ReferenceRouteTree branches={referenceRouteTree(graph)} pathname={pathname} compact />
+                  </div>
+                </details>
+              </div>
+            );
+          })}
         </nav>
+
       </DocsSidebar>
 
       <article class="docs-content reference-content">
         <header class="docs-header">
-          <p class="subheader">{subheader}</p>
-          <h1>{title}</h1>
-          <p>{description}</p>
+          <h1 class="accent">{title}</h1>
         </header>
-        <div class="prose reference-prose">
-          <slot />
-        </div>
+        <div class="prose reference-prose"><slot /></div>
       </article>
     </div>
   </main>

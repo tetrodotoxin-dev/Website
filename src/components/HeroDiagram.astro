@@ -13,7 +13,7 @@ interface Props {
 const { label, description, layers, connectors } = Astro.props;
 ---
 
-<div class="hero-diagram" role="img" aria-label={description}>
+<div class="diagram inset-shadow hero-diagram" role="img" aria-label={description}>
   <p class="hero-diagram-label">{label}</p>
   {
     layers.map((layer, index) => (
@@ -24,7 +24,7 @@ const { label, description, layers, connectors } = Astro.props;
               {layer.items.map((item) => <span>{item}</span>)}
             </div>
           ) : (
-            <div class="hero-diagram-content">
+            <div class="diagram-panel accent-panel hero-diagram-content">
               <small>{layer.eyebrow}</small>
               <strong>{layer.title}</strong>
               {layer.detail && <span>{layer.detail}</span>}

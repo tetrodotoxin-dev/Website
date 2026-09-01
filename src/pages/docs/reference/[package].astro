@@ -3,183 +3,35 @@ import ReferenceContents from '../../../components/ReferenceContents.astro';
 import ReferenceLayout from '../../../layouts/ReferenceLayout.astro';
 import {
   documentationParagraphs,
-  isReferenceType,
-  nodeAnchor,
-  nodeReferenceHref,
-  packageReferenceHref,
-  packageSlug,
-  referencePackages,
-  referenceKindLabel,
-  representedNode,
-  sourceAnchor,
-  type ReferenceNode,
-  type ReferencePackage,
+  findNode,
+  graphNodes,
+  referenceGraphs,
+  type ReferenceGraph,
 } from '../../../data/reference';
 
-interface Props {
-  document: ReferencePackage;
-}
+interface Props { graph: ReferenceGraph }
 
 export function getStaticPaths() {
-  return referencePackages.map((document) => ({
-    params: { package: packageSlug(document.package.name) },
-    props: { document },
-  }));
+  return referenceGraphs.map((graph) => ({ params: { package: graph.slug }, props: { graph } }));
 }
 
-const { document } = Astro.props;
-const packageName = document.package.name;
-const nodeById = new Map(document.nodes.map((node) => [node.id, node]));
-const packageIndex = referencePackages.findIndex((candidate) => candidate.package.name === packageName);
-const nextPackage = referencePackages[(packageIndex + 1) % referencePackages.length];
-const topLevelExports = document.exports.filter((entry) => !entry.route.includes('::'));
-const sourceRootKinds = new Set(['source-root', 'render', 'shader', 'scene', 'app', 'package']);
-
-function uniqueNodes(nodes: ReferenceNode[]): ReferenceNode[] {
-  return [...new Map(nodes.map((node) => [node.id, node])).values()];
-}
-
-function sourceDeclarations(sourceId: string): ReferenceNode[] {
-  const roots = new Set(
-    document.nodes.filter((node) => node.source === sourceId && sourceRootKinds.has(node.kind)).map((node) => node.id),
-  );
-  const declared = document.edges
-    .filter((edge) => edge.kind === 'declares' && roots.has(edge.from))
-    .map((edge) => nodeById.get(edge.target.node))
-    .filter((node): node is ReferenceNode => Boolean(node));
-  const source = document.sources.find((candidate) => candidate.id === sourceId);
-  const owned = source
-    ? document.edges
-        .filter((edge) => edge.from === source.root && ['runtime', 'program', 'scene', 'signal'].includes(edge.kind))
-        .map((edge) => nodeById.get(edge.target.node))
-        .filter((node): node is ReferenceNode => Boolean(node))
-    : [];
-  return uniqueNodes([...declared, ...owned]);
-}
+const { graph } = Astro.props;
+const root = findNode(graph.root);
+const paragraphs = documentationParagraphs(root.documentation);
 ---
 
 <ReferenceLayout
-  title={packageName}
-  description={`Version ${document.package.major}.${document.package.minor} · ${document.sources.length} source graphs and ${document.exports.length} public routes.`}
-  subheader="TTX package reference"
-  activePackage={packageName}
+  title={root.displayName}
+  description={paragraphs[0] ?? `${graphNodes(graph).length} Abstracts in ${root.displayName}.`}
+  activeGraph={graph.slug}
 >
-  <section class="reference-graph-overview" aria-labelledby="package-graph-heading">
+  <section class="reference-graph-overview" aria-labelledby="graph-contents-heading">
     <div class="reference-section-heading">
-      <div>
-        <span class="reference-kind">Completed Workspace product</span>
-        <h2 id="package-graph-heading">Package contents</h2>
-      </div>
-      <p>Explore the sources behind each Monograph Dialect, with shared Package dependencies collected in one place.</p>
+      <div><span class="reference-kind">Graph text version 1</span><h2 id="graph-contents-heading">Package contents</h2></div>
+      <p>Expand each Package route to follow its semantic owner one layer at a time.</p>
     </div>
-    <div class="reference-package-contents-panel">
-      <ReferenceContents document={document} />
-    </div>
+    <div class="reference-package-contents-panel"><ReferenceContents graph={graph} /></div>
   </section>
 
-  <section class="reference-exports" aria-labelledby="package-exports-heading">
-    <div class="reference-section-heading">
-      <div>
-        <span class="reference-kind">Public Package surface</span>
-        <h2 id="package-exports-heading">Exports</h2>
-      </div>
-      <p>Exported Aliases open the page for the represented Type while preserving the Alias in the Package graph.</p>
-    </div>
-    <div class="reference-export-list">
-      {
-        topLevelExports.map((entry) => {
-          const exported = nodeById.get(entry.node);
-          if (!exported) return null;
-          const represented = representedNode(document, exported);
-          return <a href={nodeReferenceHref(document, represented)}>{entry.route}</a>;
-        })
-      }
-    </div>
-  </section>
-
-  <nav class="reference-source-index" aria-label={`${packageName} sources`}>
-    <span>Source provenance</span>
-    <div>{document.sources.map((source) => <a href={`#${sourceAnchor(source.id)}`}>{source.path}</a>)}</div>
-  </nav>
-
-  {
-    document.sources.map((source) => {
-      const paragraphs = documentationParagraphs(source.documentation);
-      const declarations = sourceDeclarations(source.id);
-      const types = declarations.filter(isReferenceType);
-      const aliases = declarations.filter((node) => node.kind === 'alias');
-      const other = declarations.filter((node) => !isReferenceType(node) && node.kind !== 'alias');
-      return (
-        <section class="reference-source" id={sourceAnchor(source.id)}>
-          <header class="reference-source-header">
-            <div>
-              <span class="reference-kind">{source.dialect} Dialect</span>
-              <h2>{source.name}</h2>
-            </div>
-            <code>{source.path}</code>
-          </header>
-
-          {paragraphs.length > 0 && (
-            <div class="reference-documentation">{paragraphs.map((paragraph) => <p>{paragraph}</p>)}</div>
-          )}
-
-          {types.length > 0 && (
-            <section class="reference-source-summary" aria-labelledby={`${source.id}-types`}>
-              <h3 id={`${source.id}-types`}>Types</h3>
-              <div class="reference-type-grid">
-                {types.map((node) => {
-                  const nodeDocumentation = documentationParagraphs(node.documentation);
-                  return (
-                    <a class="reference-type-card" href={nodeReferenceHref(document, node)}>
-                      <span>{referenceKindLabel(node.kind)}</span>
-                      <h4>{node.name}</h4>
-                      {nodeDocumentation[0] && <p>{nodeDocumentation[0]}</p>}
-                      {node.location.authored && <small>{source.path}:{node.location.line}:{node.location.column}</small>}
-                    </a>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {aliases.length > 0 && (
-            <section class="reference-source-summary" aria-labelledby={`${source.id}-aliases`}>
-              <h3 id={`${source.id}-aliases`}>Aliases</h3>
-              <div class="reference-alias-list">
-                {aliases.map((node) => {
-                  const targetId = document.edges.find((edge) => edge.from === node.id && edge.kind === 'alias')?.target.node;
-                  const target = nodeById.get(targetId ?? '');
-                  return (
-                    <div id={nodeAnchor(node.id)}>
-                      <code>{node.declaration}</code>
-                      {target && <a href={nodeReferenceHref(document, target)}>{target.name} <span aria-hidden="true">→</span></a>}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {other.length > 0 && (
-            <section class="reference-source-summary" aria-labelledby={`${source.id}-identities`}>
-              <h3 id={`${source.id}-identities`}>Other public identities</h3>
-              <div class="reference-alias-list">
-                {other.map((node) => (
-                  <div id={nodeAnchor(node.id)}>
-                    <code>{node.declaration || node.name}</code>
-                    <span>{referenceKindLabel(node.kind)}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-        </section>
-      );
-    })
-  }
-
-  <footer class="reference-next-package">
-    <a href="/docs/reference/">← All packages</a>
-    <a href={packageReferenceHref(nextPackage.package.name)}>Next: {nextPackage.package.name} →</a>
-  </footer>
+  <footer class="reference-next-package"><a href="/docs/reference/">← All Packages</a></footer>
 </ReferenceLayout>

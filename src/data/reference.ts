@@ -1,223 +1,205 @@
 import referenceCollection from './generated/ttx-reference.json';
 
-export interface ReferenceTarget {
-  node: string;
-  package: string;
-  major: number;
-  minor: number;
-  route: string;
-  role: string;
-  name: string;
-  kind: string;
+export interface ReferenceGraph {
+  slug: string;
+  source: string;
+  displaySource: string;
+  dialect: string;
+  root: string;
 }
 
-export interface ReferenceEdge {
-  from: string;
-  kind: string;
-  label: string;
-  index: number;
-  target: ReferenceTarget;
+export interface ReferenceConcept {
+  name: string;
+  displayName: string;
+  target: string;
 }
 
 export interface ReferenceNode {
-  id: string;
-  source: string;
+  key: string;
+  graph: string;
+  id: number;
   name: string;
-  kind: string;
-  visibility: 'public' | 'exposed';
-  role: '' | 'self' | 'static';
-  declaration: string;
+  displayName: string;
+  contracts: string[];
   documentation: string[];
-  location: ReferenceLocation;
-}
-
-export interface ReferenceLocation {
-  authored: boolean;
-  path: string;
-  line: number;
-  column: number;
-  endLine: number;
-  endColumn: number;
-  offset: number;
-  length: number;
-}
-
-export interface ReferenceSource {
-  id: string;
-  name: string;
-  path: string;
-  dialect: string;
-  root: string;
-  semanticRoot: string;
-  documentation: string[];
-}
-
-export interface ReferenceExport {
+  resolved: string;
+  type: string;
+  concepts: ReferenceConcept[];
+  canonicalPath: string[] | null;
   route: string;
-  role: string;
-  node: string;
+  slug: string;
 }
 
-export interface ReferencePackage {
-  package: {
-    name: string;
-    major: number;
-    minor: number;
-    root: string;
-  };
-  sources: ReferenceSource[];
-  nodes: ReferenceNode[];
-  edges: ReferenceEdge[];
-  exports: ReferenceExport[];
+export interface ReferenceLayoutEntry {
+  index: number;
+  name: string;
+  displayName: string;
+  target: string | null;
+}
+
+export interface ReferenceLayout {
+  owner: string;
+  role: 'type' | 'parameters' | 'results';
+  entries: ReferenceLayoutEntry[];
+}
+
+export interface ReferenceRouteBranch {
+  segment: string;
+  route: string;
+  node: ReferenceNode | null;
+  showOverview: boolean;
+  children: ReferenceRouteBranch[];
 }
 
 interface ReferenceCollection {
-  schema: 'tetrodotoxin.documentation.graph.collection.v1';
-  packages: ReferencePackage[];
+  schema: 'ttx.graph.collection.v1';
+  graphs: ReferenceGraph[];
+  nodes: ReferenceNode[];
+  edges: Array<{ from: string; kind: 'resolve' | 'type' | 'concept'; name: string; to: string }>;
+  layouts: ReferenceLayout[];
 }
 
 const collection = referenceCollection as ReferenceCollection;
+export const referenceGraphs = collection.graphs;
+export const referenceNodes = collection.nodes;
+export const referenceEdges = collection.edges;
+export const referenceLayouts = collection.layouts;
 
-export const referencePackages = collection.packages;
-
-export const referenceTypeKinds = new Set([
-  'object',
-  'structure',
-  'enumeration',
-  'namespace',
-  'type',
-  'render-contract',
-  'shader-program',
-]);
-
-export function packageSlug(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+export function graphNodes(graph: ReferenceGraph): ReferenceNode[] {
+  return referenceNodes.filter((node) => node.graph === graph.slug);
 }
 
-export function packageReferenceHref(name: string): string {
-  return `/docs/reference/${packageSlug(name)}/`;
+export function navigableNodes(graph: ReferenceGraph): ReferenceNode[] {
+  return graphNodes(graph)
+    .filter((node) => node.canonicalPath !== null)
+    .sort((left, right) => {
+      const leftPath = left.canonicalPath ?? [];
+      const rightPath = right.canonicalPath ?? [];
+      if (leftPath.length !== rightPath.length) return leftPath.length - rightPath.length;
+      return leftPath.join('').localeCompare(rightPath.join(''));
+    });
 }
 
-export function nodeAnchor(node: string): string {
-  return `node-${node}`;
-}
-
-export function sourceAnchor(source: string): string {
-  return `source-${source}`;
-}
-
-export function isReferenceType(node: ReferenceNode): boolean {
-  return referenceTypeKinds.has(node.kind);
-}
-
-export function referenceKindLabel(kind: string): string {
-  return kind.replaceAll('-', ' ');
-}
-
-export function representedNode(document: ReferencePackage, node: ReferenceNode): ReferenceNode {
-  if (node.kind !== 'alias') {
-    return node;
+export function referenceRouteTree(graph: ReferenceGraph): ReferenceRouteBranch[] {
+  interface MutableBranch {
+    segment: string;
+    route: string;
+    node: ReferenceNode | null;
+    children: Map<string, MutableBranch>;
   }
-  const target = document.edges.find((edge) => edge.from === node.id && edge.kind === 'alias')?.target.node;
-  const represented = document.nodes.find((candidate) => candidate.id === target);
-  return represented && represented.kind !== 'value' ? represented : node;
-}
 
-export function typeSlug(document: ReferencePackage, node: ReferenceNode): string {
-  const exportedRoutes = document.exports
-    .filter((entry) => {
-      if (entry.node === node.id) {
-        return true;
+  const roots = new Map<string, MutableBranch>();
+
+  for (const node of navigableNodes(graph)) {
+    const segments = (node.canonicalPath ?? []).map(displayBytes);
+    let siblings = roots;
+    const route: string[] = [];
+
+    segments.forEach((segment, index) => {
+      route.push(segment);
+      let branch = siblings.get(segment);
+      if (!branch) {
+        branch = {
+          segment,
+          route: route.join('::'),
+          node: null,
+          children: new Map(),
+        };
+        siblings.set(segment, branch);
       }
-      const exported = document.nodes.find((candidate) => candidate.id === entry.node);
-      return exported ? representedNode(document, exported).id === node.id : false;
-    })
-    .map((entry) => entry.route)
-    .sort((left, right) => left.length - right.length || left.localeCompare(right));
-  if (exportedRoutes[0]) {
-    return packageSlug(exportedRoutes[0]);
+
+      if (index === segments.length - 1) branch.node = node;
+      siblings = branch.children;
+    });
   }
-  const source = document.sources.find((candidate) => candidate.id === node.source);
-  return `${packageSlug(source?.path ?? 'semantic')}-${packageSlug(node.name)}-${node.id}`;
+
+  function complete(branches: Map<string, MutableBranch>): ReferenceRouteBranch[] {
+    return [...branches.values()]
+      .sort((left, right) => left.segment.localeCompare(right.segment))
+      .map((branch) => ({
+        segment: branch.segment,
+        route: branch.route,
+        node: branch.node,
+        showOverview: branch.node !== null && !isStructuralRouteNode(branch.node) && branch.node.displayName !== '<source>',
+        children: complete(branch.children),
+      }));
+  }
+
+  function present(branch: ReferenceRouteBranch): ReferenceRouteBranch | null {
+    const children = branch.children
+      .map(present)
+      .filter((child): child is ReferenceRouteBranch => child !== null);
+
+    if (branch.node && isStructuralRouteNode(branch.node) && children.length === 0) return null;
+
+    const groupsTypes = branch.segment === 'static'
+      && branch.node !== null
+      && isStructuralRouteNode(branch.node)
+      && children.some((child) => child.node !== null && representsType(child.node));
+
+    return {
+      ...branch,
+      segment: groupsTypes ? 'Types' : branch.segment,
+      children,
+    };
+  }
+
+  return complete(roots)
+    .flatMap((branch) => branch.node?.displayName === '<source>' ? branch.children : [branch])
+    .map(present)
+    .filter((branch): branch is ReferenceRouteBranch => branch !== null);
 }
 
-export function typeReferenceHref(document: ReferencePackage, node: ReferenceNode): string {
-  return `${packageReferenceHref(document.package.name)}${typeSlug(document, node)}/`;
+function isStructuralRouteNode(node: ReferenceNode): boolean {
+  return node.contracts.length === 1
+    && node.contracts[0] === 'abstract'
+    && (node.displayName === 'static' || node.displayName === 'instance');
 }
 
-export function owningType(document: ReferencePackage, node: ReferenceNode): ReferenceNode | undefined {
-  const visited = new Set<string>();
-  let selected: ReferenceNode | undefined = node;
-  while (selected && !visited.has(selected.id)) {
-    visited.add(selected.id);
-    const parentId = document.edges.find(
-      (edge) => ['declares', 'case', 'value'].includes(edge.kind) && edge.target.node === selected?.id,
-    )?.from;
-    const parent = document.nodes.find((candidate) => candidate.id === parentId);
-    if (!parent) {
-      return undefined;
-    }
-    if (isReferenceType(parent)) {
-      return parent;
-    }
-    selected = parent;
-  }
-  return undefined;
+function representsType(node: ReferenceNode): boolean {
+  if (node.contracts.includes('type')) return true;
+  return referenceNodes.find((candidate) => candidate.key === node.resolved)?.contracts.includes('type') ?? false;
 }
 
-export function nodeReferenceHref(document: ReferencePackage, node: ReferenceNode): string {
-  if (isReferenceType(node)) {
-    return typeReferenceHref(document, node);
-  }
-  const owner = owningType(document, node);
-  return owner
-    ? `${typeReferenceHref(document, owner)}#${nodeAnchor(node.id)}`
-    : `${packageReferenceHref(document.package.name)}#${nodeAnchor(node.id)}`;
+export function findNode(key: string): ReferenceNode {
+  const node = referenceNodes.find((candidate) => candidate.key === key);
+  if (!node) throw new Error(`Generated graph references missing node ${key}.`);
+  return node;
+}
+
+export function graphHref(graph: ReferenceGraph): string {
+  return `/docs/reference/${graph.slug}/`;
+}
+
+export function nodeHref(node: ReferenceNode): string {
+  return `/docs/reference/${node.graph}/${node.slug}/`;
+}
+
+export function nodeLayouts(node: ReferenceNode): ReferenceLayout[] {
+  return referenceLayouts.filter((layout) => layout.owner === node.key);
+}
+
+export function displayBytes(hex: string): string {
+  if (hex.length === 0) return '';
+  const bytes = Uint8Array.from(hex.match(/../g) ?? [], (byte) => Number.parseInt(byte, 16));
+  const text = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+  const roundTrip = Array.from(new TextEncoder().encode(text), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return roundTrip === hex && !/[\u0000-\u001f\u007f]/u.test(text)
+    ? text
+    : `$[${hex.match(/../g)?.join(' ') ?? ''}]`;
 }
 
 export function documentationParagraphs(lines: string[]): string[] {
   const paragraphs: string[] = [];
-  let paragraph: string[] = [];
-  for (const line of lines) {
-    if (line.length === 0) {
-      if (paragraph.length > 0) {
-        paragraphs.push(paragraph.join(' '));
-        paragraph = [];
-      }
+  let current: string[] = [];
+  for (const line of lines.map(displayBytes)) {
+    if (line.trim() === '') {
+      if (current.length > 0) paragraphs.push(current.join(' '));
+      current = [];
     } else {
-      paragraph.push(line);
+      current.push(line.trim());
     }
   }
-  if (paragraph.length > 0) {
-    paragraphs.push(paragraph.join(' '));
-  }
+  if (current.length > 0) paragraphs.push(current.join(' '));
   return paragraphs;
-}
-
-export function targetHref(target: ReferenceTarget, currentPackage: string): string | undefined {
-  if (target.node && target.package === currentPackage) {
-    const document = referencePackages.find((candidate) => candidate.package.name === currentPackage);
-    const node = document?.nodes.find((candidate) => candidate.id === target.node);
-    return document && node ? nodeReferenceHref(document, node) : undefined;
-  }
-  if (!target.package) {
-    return undefined;
-  }
-
-  const base = packageReferenceHref(target.package);
-  if (!target.route) {
-    return base;
-  }
-  const document = referencePackages.find((candidate) => candidate.package.name === target.package);
-  const selected = document?.exports.find(
-    (entry) => entry.route === target.route && entry.role === target.role,
-  );
-  if (!selected || !document) {
-    return base;
-  }
-  const exportedNode = document.nodes.find((node) => node.id === selected.node);
-  if (!exportedNode) {
-    return base;
-  }
-  return nodeReferenceHref(document, representedNode(document, exportedNode));
 }

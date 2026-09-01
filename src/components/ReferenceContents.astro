@@ -1,59 +1,37 @@
 ---
 import {
-  packageReferenceHref,
-  sourceAnchor,
-  type ReferencePackage,
+  findNode,
+  graphNodes,
+  navigableNodes,
+  nodeHref,
+  referenceRouteTree,
+  type ReferenceGraph,
 } from '../data/reference';
+import ReferenceRouteTree from './ReferenceRouteTree.astro';
 
 interface Props {
-  document: ReferencePackage;
+  graph: ReferenceGraph;
 }
 
-const { document } = Astro.props;
-const sources = document.sources.filter((source) => source.id !== document.package.root);
-const groups = sources.reduce<Array<{ dialect: string; sources: typeof sources }>>((result, source) => {
-  const group = result.find((candidate) => candidate.dialect === source.dialect);
-  if (group) {
-    group.sources.push(source);
-  } else {
-    result.push({ dialect: source.dialect, sources: [source] });
-  }
-  return result;
-}, []);
-const dependencies = [...new Map(
-  document.edges
-    .filter((edge) => edge.kind === 'package-import')
-    .map((edge) => [`${edge.target.package}@${edge.target.major}.${edge.target.minor}`, edge.target]),
-).values()];
+const { graph } = Astro.props;
+const dialect = findNode(graph.dialect);
+const root = findNode(graph.root);
+const routes = referenceRouteTree(graph);
 ---
 
 <div class="reference-package-contents">
-  {
-    groups.map((group) => (
-      <section class="reference-monograph-group" aria-labelledby={`monograph-${group.dialect.toLowerCase()}`}>
-        <h3 id={`monograph-${group.dialect.toLowerCase()}`}>{group.dialect}</h3>
-        <div class="reference-capsule-list">
-          {group.sources.map((source) => (
-            <a class="reference-source-capsule" href={`#${sourceAnchor(source.id)}`}>{source.path}</a>
-          ))}
-        </div>
-      </section>
-    ))
-  }
+  <section class="reference-monograph-group">
+    <h3>Package identity</h3>
+    <dl class="reference-relationships">
+      <div><dt>Package</dt><dd><a href={nodeHref(root)}>{root.displayName}</a></dd></div>
+      <div><dt>Language</dt><dd><a href={nodeHref(dialect)}>{dialect.displayName}</a></dd></div>
+      <div><dt>Source</dt><dd><code>{graph.displaySource}</code></dd></div>
+      <div><dt>Surface</dt><dd>{graphNodes(graph).length} Abstracts · {navigableNodes(graph).length} routes</dd></div>
+    </dl>
+  </section>
 
-  <section class="reference-monograph-group reference-dependency-group" aria-labelledby="package-dependencies">
-    <h3 id="package-dependencies">Dependencies</h3>
-    <div class="reference-capsule-list">
-      {
-        dependencies.length > 0
-          ? dependencies.map((dependency) => (
-              <a class="reference-dependency-capsule" href={packageReferenceHref(dependency.package)}>
-                <span>{dependency.package}</span>
-                <small>{dependency.major}.{dependency.minor}</small>
-              </a>
-            ))
-          : <span class="reference-empty-capsule">None</span>
-      }
-    </div>
+  <section class="reference-monograph-group">
+    <h3>Package routes</h3>
+    <ReferenceRouteTree branches={routes} pathname={Astro.url.pathname} />
   </section>
 </div>

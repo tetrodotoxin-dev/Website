@@ -1,233 +1,236 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { readFile, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const websiteRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const sourceRoot = resolve(
-  process.argv[2] ?? join(websiteRoot, '..', 'tetrodotoxin', '.bin', 'bin', 'packages', 'ttx'),
-);
-const outputPath = join(websiteRoot, 'src', 'data', 'generated', 'ttx-reference.json');
+const outputPath = resolve(websiteRoot, 'src/data/generated/ttx-reference.json');
 
-function requireObject(value, context) {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) {
-    throw new Error(`${context} must be an object.`);
-  }
+function fail(message) {
+  throw new Error(`Graph text: ${message}`);
 }
 
-function requireString(value, context) {
-  if (typeof value !== 'string') {
-    throw new Error(`${context} must be a string.`);
-  }
+function decodeHex(token, context) {
+  if (!/^x(?:[0-9a-f]{2})*$/.test(token)) fail(`${context} is not lossless hexadecimal bytes.`);
+  return token.slice(1);
 }
 
-function requireNumber(value, context) {
-  if (!Number.isInteger(value) || value < 0) {
-    throw new Error(`${context} must be a nonnegative integer.`);
-  }
+function displayBytes(hex) {
+  const bytes = Buffer.from(hex, 'hex');
+  const text = bytes.toString('utf8');
+  return Buffer.from(text, 'utf8').equals(bytes) && !/[\u0000-\u001f\u007f]/u.test(text)
+    ? text
+    : `$[${hex.match(/../g)?.join(' ') ?? ''}]`;
 }
 
-function requireStringArray(value, context) {
-  if (!Array.isArray(value)) {
-    throw new Error(`${context} must be an array.`);
-  }
-  value.forEach((entry, index) => requireString(entry, `${context}[${index}]`));
+function parseCount(token, context) {
+  const value = Number(token);
+  if (!Number.isSafeInteger(value) || value < 0) fail(`${context} is not a nonnegative integer.`);
+  return value;
 }
 
-function validateTarget(target, context) {
-  requireObject(target, context);
-  requireString(target.node, `${context}.node`);
-  requireString(target.package, `${context}.package`);
-  requireNumber(target.major, `${context}.major`);
-  requireNumber(target.minor, `${context}.minor`);
-  requireString(target.route, `${context}.route`);
-  requireString(target.role, `${context}.role`);
-  requireString(target.name, `${context}.name`);
-  requireString(target.kind, `${context}.kind`);
+function expect(parts, word, context) {
+  if (parts.shift() !== word) fail(`${context} requires '${word}'.`);
 }
 
-function validatePackage(document, path) {
-  requireObject(document, path);
-  if (document.schema !== 'tetrodotoxin.documentation.graph.v1') {
-    throw new Error(`${path} uses an unsupported documentation graph schema.`);
-  }
-  requireObject(document.package, `${path}.package`);
-  requireString(document.package.name, `${path}.package.name`);
-  requireNumber(document.package.major, `${path}.package.major`);
-  requireNumber(document.package.minor, `${path}.package.minor`);
-  requireString(document.package.root, `${path}.package.root`);
-  for (const field of ['sources', 'nodes', 'edges', 'exports']) {
-    if (!Array.isArray(document[field])) {
-      throw new Error(`${path}.${field} must be an array.`);
-    }
-  }
+function parseDump(text, input) {
+  const lines = text.replace(/\r/g, '').split('\n');
+  let cursor = 0;
+  const next = () => lines[cursor++]?.trim().split(/\s+/) ?? [];
 
-  const sourceIds = new Set();
-  document.sources.forEach((source, index) => {
-    const context = `${path}.sources[${index}]`;
-    requireObject(source, context);
-    for (const field of ['id', 'name', 'path', 'dialect', 'root', 'semanticRoot']) {
-      requireString(source[field], `${context}.${field}`);
-    }
-    requireStringArray(source.documentation, `${context}.documentation`);
-    if (sourceIds.has(source.id)) {
-      throw new Error(`${path} contains duplicate source id ${source.id}.`);
-    }
-    sourceIds.add(source.id);
-  });
-  if (!sourceIds.has(document.package.root)) {
-    throw new Error(`${path}.package.root does not select a source.`);
-  }
+  let parts = next();
+  if (parts.join(' ') !== 'ttx.graph 1') fail(`${input} uses an unsupported graph version.`);
+  parts = next(); expect(parts, 'source', input);
+  const source = decodeHex(parts.shift(), `${input} source`);
+  parts = next(); expect(parts, 'dialect', input);
+  const dialect = parseCount(parts.shift(), `${input} dialect`);
+  parts = next(); expect(parts, 'root', input);
+  const root = parseCount(parts.shift(), `${input} root`);
+  parts = next(); expect(parts, 'nodes', input);
+  const nodeCount = parseCount(parts.shift(), `${input} node count`);
+  const nodes = [];
 
-  const nodeIds = new Set();
-  const aliasIds = new Set();
-  document.nodes.forEach((node, index) => {
-    const context = `${path}.nodes[${index}]`;
-    requireObject(node, context);
-    for (const field of ['id', 'source', 'name', 'kind', 'visibility', 'role', 'declaration']) {
-      requireString(node[field], `${context}.${field}`);
+  for (let expected = 0; expected < nodeCount; expected += 1) {
+    parts = next(); expect(parts, 'node', `${input} node ${expected}`);
+    const id = parseCount(parts.shift(), `${input} node id`);
+    if (id !== expected) fail(`${input} node IDs must be contiguous dump-local IDs.`);
+    parts = next(); expect(parts, 'name', `${input} node ${id}`);
+    const name = decodeHex(parts.shift(), `${input} node ${id} name`);
+    parts = next(); expect(parts, 'contracts', `${input} node ${id}`);
+    const contracts = parts;
+    parts = next(); expect(parts, 'resolve', `${input} node ${id}`);
+    const resolved = parseCount(parts.shift(), `${input} node ${id} resolve edge`);
+    parts = next(); expect(parts, 'type', `${input} node ${id}`);
+    const type = parseCount(parts.shift(), `${input} node ${id} Type edge`);
+    parts = next(); expect(parts, 'documentation', `${input} node ${id}`);
+    const documentationCount = parseCount(parts.shift(), `${input} documentation count`);
+    const documentation = [];
+    for (let line = 0; line < documentationCount; line += 1) {
+      parts = next(); expect(parts, 'line', `${input} documentation line`);
+      documentation.push(decodeHex(parts.shift(), `${input} documentation line`));
     }
-    requireStringArray(node.documentation, `${context}.documentation`);
-    requireObject(node.location, `${context}.location`);
-    if (typeof node.location.authored !== 'boolean') {
-      throw new Error(`${context}.location.authored must be a boolean.`);
+    parts = next(); expect(parts, 'concepts', `${input} node ${id}`);
+    const conceptCount = parseCount(parts.shift(), `${input} concept count`);
+    const concepts = [];
+    for (let conceptIndex = 0; conceptIndex < conceptCount; conceptIndex += 1) {
+      parts = next(); expect(parts, 'concept', `${input} concept edge`);
+      concepts.push({
+        name: decodeHex(parts.shift(), `${input} concept name`),
+        target: parseCount(parts.shift(), `${input} concept target`),
+      });
     }
-    requireString(node.location.path, `${context}.location.path`);
-    for (const field of ['line', 'column', 'endLine', 'endColumn', 'offset', 'length']) {
-      requireNumber(node.location[field], `${context}.location.${field}`);
+    const layouts = [];
+    parts = next();
+    while (parts[0] === 'layout') {
+      parts.shift();
+      const role = parts.shift();
+      const entryCount = parseCount(parts.shift(), `${input} ${role} Layout count`);
+      const entries = [];
+      for (let index = 0; index < entryCount; index += 1) {
+        parts = next(); expect(parts, 'entry', `${input} ${role} Layout entry`);
+        const entryName = decodeHex(parts.shift(), `${input} Layout entry name`);
+        const targetToken = parts.shift();
+        entries.push({
+          index,
+          name: entryName,
+          target: targetToken === 'none' ? null : parseCount(targetToken, `${input} Layout target`),
+        });
+      }
+      layouts.push({ role, entries });
+      parts = next();
     }
-    if (node.location.authored && (!node.location.path || !node.location.line || !node.location.column)) {
-      throw new Error(`${context}.location does not identify its authored source position.`);
-    }
-    if (!sourceIds.has(node.source)) {
-      throw new Error(`${context}.source does not select a source.`);
-    }
-    if (!['public', 'exposed'].includes(node.visibility)) {
-      throw new Error(`${context} exposes nonpublic visibility ${node.visibility}.`);
-    }
-    if (nodeIds.has(node.id)) {
-      throw new Error(`${path} contains duplicate node id ${node.id}.`);
-    }
-    nodeIds.add(node.id);
-    if (node.kind === 'alias') {
-      aliasIds.add(node.id);
-    }
-  });
-
-  for (const source of document.sources) {
-    if (!nodeIds.has(source.root) || !nodeIds.has(source.semanticRoot)) {
-      throw new Error(`${path} source ${source.id} does not select its semantic roots.`);
-    }
+    if (parts.join(' ') !== 'end') fail(`${input} node ${id} is not terminated.`);
+    nodes.push({ id, name, contracts, resolved, type, documentation, concepts, layouts });
   }
 
-  const linkedAliases = new Set();
-  document.edges.forEach((edge, index) => {
-    const context = `${path}.edges[${index}]`;
-    requireObject(edge, context);
-    requireString(edge.from, `${context}.from`);
-    requireString(edge.kind, `${context}.kind`);
-    requireString(edge.label, `${context}.label`);
-    requireNumber(edge.index, `${context}.index`);
-    validateTarget(edge.target, `${context}.target`);
-    if (!nodeIds.has(edge.from)) {
-      throw new Error(`${context}.from does not select a local graph node.`);
+  for (const node of nodes) {
+    const layoutTargets = node.layouts.flatMap((layout) =>
+      layout.entries.map((entry) => entry.target).filter((value) => value !== null));
+    for (const target of [node.resolved, node.type, ...node.concepts.map((edge) => edge.target), ...layoutTargets]) {
+      if (!nodes[target]) fail(`${input} node ${node.id} references missing node ${target}.`);
     }
-    if (edge.target.node && !nodeIds.has(edge.target.node)) {
-      throw new Error(`${context}.target.node does not select a local graph node.`);
+  }
+  if (!nodes[dialect] || !nodes[root]) fail(`${input} header references a missing node.`);
+  return { source, dialect, root, nodes };
+}
+
+function comparePaths(left, right) {
+  if (left.length !== right.length) return left.length - right.length;
+  for (let index = 0; index < left.length; index += 1) {
+    if (left[index] !== right[index]) return left[index] < right[index] ? -1 : 1;
+  }
+  return 0;
+}
+
+function canonicalPaths(graph) {
+  const paths = new Map([[graph.root, []]]);
+  const pending = [graph.root];
+  while (pending.length > 0) {
+    const from = pending.shift();
+    const prefix = paths.get(from);
+    const resolved = graph.nodes[from].resolved;
+    const resolvedPath = paths.get(resolved);
+    if (!resolvedPath || comparePaths(prefix, resolvedPath) < 0) {
+      paths.set(resolved, prefix);
+      pending.push(resolved);
     }
-    if (edge.target.node && edge.target.package !== document.package.name) {
-      throw new Error(`${context} gives a local node to another Package.`);
-    }
-    if (edge.kind === 'alias') {
-      linkedAliases.add(edge.from);
-      if (!edge.target.node && !edge.target.route) {
-        throw new Error(`${context} does not give its Alias a navigable target.`);
+    const concepts = [...graph.nodes[from].concepts].sort((left, right) =>
+      left.name === right.name ? 0 : left.name < right.name ? -1 : 1);
+    for (const edge of concepts) {
+      const candidate = [...prefix, edge.name];
+      const current = paths.get(edge.target);
+      if (!current || comparePaths(candidate, current) < 0) {
+        paths.set(edge.target, candidate);
+        pending.push(edge.target);
       }
     }
+  }
+  return paths;
+}
+
+function slug(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'graph';
+}
+
+function project(graph, index) {
+  const sourceName = displayBytes(graph.source);
+  const graphSlug = `${slug(sourceName.split('/').at(-1)?.replace(/\.ttx$/u, '') ?? sourceName)}-${index + 1}`;
+  const paths = canonicalPaths(graph);
+  const nodes = graph.nodes.map((node) => {
+    const path = paths.get(node.id) ?? null;
+    const route = path?.map(displayBytes).join('::') ?? '';
+    return {
+      key: `${graphSlug}:${node.id}`,
+      graph: graphSlug,
+      id: node.id,
+      name: node.name,
+      displayName: displayBytes(node.name),
+      contracts: node.contracts,
+      documentation: node.documentation,
+      resolved: `${graphSlug}:${node.resolved}`,
+      type: `${graphSlug}:${node.type}`,
+      concepts: node.concepts.map((edge) => ({
+        name: edge.name,
+        displayName: displayBytes(edge.name),
+        target: `${graphSlug}:${edge.target}`,
+      })),
+      canonicalPath: path,
+      route,
+      slug: `${slug(route || displayBytes(node.name))}-${node.id}`,
+    };
   });
-  for (const alias of aliasIds) {
-    if (!linkedAliases.has(alias)) {
-      throw new Error(`${path} Alias ${alias} has no resolved graph edge.`);
-    }
-  }
-
-  const selectors = new Set();
-  document.exports.forEach((entry, index) => {
-    const context = `${path}.exports[${index}]`;
-    requireObject(entry, context);
-    requireString(entry.route, `${context}.route`);
-    requireString(entry.role, `${context}.role`);
-    requireString(entry.node, `${context}.node`);
-    if (!entry.route || !entry.node || !nodeIds.has(entry.node)) {
-      throw new Error(`${context} must select one local public graph node.`);
-    }
-    const selector = `${entry.route}::${entry.role}`;
-    if (selectors.has(selector)) {
-      throw new Error(`${path} contains duplicate public selector ${selector}.`);
-    }
-    selectors.add(selector);
-  });
+  const layouts = graph.nodes.flatMap((node) => node.layouts.map((layout) => ({
+    owner: `${graphSlug}:${node.id}`,
+    role: layout.role,
+    entries: layout.entries.map((entry) => ({
+      index: entry.index,
+      name: entry.name,
+      displayName: displayBytes(entry.name),
+      target: entry.target === null ? null : `${graphSlug}:${entry.target}`,
+    })),
+  })));
+  const edges = graph.nodes.flatMap((node) => [
+    { from: `${graphSlug}:${node.id}`, kind: 'resolve', name: '', to: `${graphSlug}:${node.resolved}` },
+    { from: `${graphSlug}:${node.id}`, kind: 'type', name: '', to: `${graphSlug}:${node.type}` },
+    ...node.concepts.map((edge) => ({
+      from: `${graphSlug}:${node.id}`,
+      kind: 'concept',
+      name: edge.name,
+      to: `${graphSlug}:${edge.target}`,
+    })),
+  ]);
+  return {
+    graph: {
+      slug: graphSlug,
+      source: graph.source,
+      displaySource: sourceName,
+      dialect: `${graphSlug}:${graph.dialect}`,
+      root: `${graphSlug}:${graph.root}`,
+    },
+    nodes,
+    edges,
+    layouts,
+  };
 }
 
-async function findProducts(directory) {
-  const products = [];
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    const path = join(directory, entry.name);
-    if (entry.isDirectory()) {
-      products.push(...await findProducts(path));
-    } else if (entry.isFile() && entry.name === 'documentation.json') {
-      products.push(path);
-    }
-  }
-  return products.sort();
+async function readStdin() {
+  const chunks = [];
+  for await (const chunk of process.stdin) chunks.push(chunk);
+  return Buffer.concat(chunks).toString('utf8');
 }
 
-const productPaths = await findProducts(sourceRoot);
-if (productPaths.length === 0) {
-  throw new Error(`No documentation.json products were found beneath ${sourceRoot}.`);
-}
+const inputs = process.argv.slice(2);
+const texts = inputs.length > 0
+  ? await Promise.all(inputs.map((path) => readFile(resolve(path), 'utf8')))
+  : [await readStdin()];
+if (texts.some((text) => text.trim() === '')) fail('no graph text was supplied.');
 
-const packages = [];
-for (const path of productPaths) {
-  const document = JSON.parse(await readFile(path, 'utf8'));
-  validatePackage(document, path);
-  packages.push(document);
-}
-packages.sort((left, right) => left.package.name.localeCompare(right.package.name));
-
-const packageNames = new Set();
-for (const document of packages) {
-  if (packageNames.has(document.package.name)) {
-    throw new Error(`Duplicate documentation graph for ${document.package.name}.`);
-  }
-  packageNames.add(document.package.name);
-}
-
+const projections = texts.map((text, index) => project(parseDump(text, inputs[index] ?? 'stdin'), index));
 const collection = {
-  schema: 'tetrodotoxin.documentation.graph.collection.v1',
-  packages,
+  schema: 'ttx.graph.collection.v1',
+  graphs: projections.map((projection) => projection.graph),
+  nodes: projections.flatMap((projection) => projection.nodes),
+  edges: projections.flatMap((projection) => projection.edges),
+  layouts: projections.flatMap((projection) => projection.layouts),
 };
-const generated = `${JSON.stringify(collection, null, 2)}\n`;
-let current = '';
-try {
-  current = await readFile(outputPath, 'utf8');
-} catch (error) {
-  if (error.code !== 'ENOENT') {
-    throw error;
-  }
-}
-if (current !== generated) {
-  await writeFile(outputPath, generated);
-}
-
-const totals = packages.reduce(
-  (summary, document) => {
-    summary.sources += document.sources.length;
-    summary.nodes += document.nodes.length;
-    summary.edges += document.edges.length;
-    return summary;
-  },
-  { sources: 0, nodes: 0, edges: 0 },
-);
-console.log(
-  `Synchronized ${packages.length} packages, ${totals.sources} sources, ${totals.nodes} identities, and ${totals.edges} edges.`,
-);
+await writeFile(outputPath, `${JSON.stringify(collection, null, 2)}\n`);
+console.log(`Synchronized ${collection.graphs.length} graph dumps and ${collection.nodes.length} Abstracts.`);

@@ -1,51 +1,53 @@
 ---
 import ReferenceLayout from '../../../layouts/ReferenceLayout.astro';
-import { isReferenceType, packageReferenceHref, referencePackages } from '../../../data/reference';
+import {
+  documentationParagraphs,
+  findNode,
+  graphHref,
+  graphNodes,
+  navigableNodes,
+  referenceGraphs,
+} from '../../../data/reference';
 
-const totals = referencePackages.reduce(
-  (summary, document) => {
-    summary.sources += document.sources.length;
-    summary.types += document.nodes.filter(isReferenceType).length;
-    return summary;
-  },
-  { sources: 0, types: 0 },
-);
+const totals = referenceGraphs.reduce((result, graph) => ({
+  nodes: result.nodes + graphNodes(graph).length,
+  routes: result.routes + navigableNodes(graph).length,
+}), { nodes: 0, routes: 0 });
 ---
 
 <ReferenceLayout
-  title="TTX package reference"
-  description="Public language and runtime APIs projected from completed TTX semantic graphs."
-  subheader="Generated from source"
+  title="TTX Package reference"
+  description="Generated Package identities and their live semantic routes, rendered directly from versioned graph text."
 >
   <section class="reference-introduction" aria-labelledby="reference-about">
-    <h2 id="reference-about">The source graph is the documentation source</h2>
+    <h2 id="reference-about">The Package graph is the documentation source</h2>
     <p>
-      Puffer interprets each Package with the same Dialects and Workspace used for compilation, then a
-      Documentation Terminal serializes its public identities and their real semantic relationships into a
-      stable graph product. The website presents that graph without parsing TTX or maintaining another symbol model.
+      Each dump records real Abstract identities, concepts, contracts, Type relationships, and ordered Layouts.
+      The website applies no Dialect-specific schema or semantic reconstruction.
     </p>
     <div class="reference-totals" aria-label="Reference totals">
-      <span><strong>{referencePackages.length}</strong> packages</span>
-      <span><strong>{totals.sources}</strong> sources</span>
-      <span><strong>{totals.types}</strong> public types</span>
+      <span><strong>{referenceGraphs.length}</strong> Packages</span>
+      <span><strong>{totals.nodes}</strong> Abstracts</span>
+      <span><strong>{totals.routes}</strong> concept paths</span>
     </div>
   </section>
 
   <section class="reference-package-list" aria-labelledby="reference-packages">
-    <h2 id="reference-packages">Package reference</h2>
-    <div class="reference-package-grid">
-      {
-        referencePackages.map((document) => {
-          return (
-            <a class="reference-package-card" href={packageReferenceHref(document.package.name)}>
-              <span class="reference-version">Version {document.package.major}.{document.package.minor}</span>
-              <h3>{document.package.name}</h3>
-              <p>{document.sources.length} sources · {document.nodes.filter(isReferenceType).length} public types</p>
-              <span class="reference-card-action">Open reference <span aria-hidden="true">→</span></span>
-            </a>
-          );
-        })
-      }
+    <h2 id="reference-packages">Packages</h2>
+    <div class="grid columns-2">
+      {referenceGraphs.map((graph) => {
+        const root = findNode(graph.root);
+        const summary = documentationParagraphs(root.documentation)[0];
+        return (
+          <a class="card reference-package-card" href={graphHref(graph)}>
+            <span class="reference-version">Package graph · version 1</span>
+            <h3>{root.displayName}</h3>
+            {summary && <p>{summary}</p>}
+            <small>{graphNodes(graph).length} Abstracts · {navigableNodes(graph).length} routes</small>
+            <span class="reference-card-action">Open Package <span aria-hidden="true">→</span></span>
+          </a>
+        );
+      })}
     </div>
   </section>
 </ReferenceLayout>

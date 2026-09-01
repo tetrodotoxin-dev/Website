@@ -1,0 +1,53 @@
+---
+import { nodeHref, type ReferenceRouteBranch } from '../data/reference';
+
+interface Props {
+  branches: ReferenceRouteBranch[];
+  pathname: string;
+  compact?: boolean;
+  nested?: boolean;
+}
+
+const {
+  branches,
+  pathname,
+  compact = false,
+  nested = false,
+} = Astro.props;
+
+function containsCurrent(branch: ReferenceRouteBranch): boolean {
+  return (
+    (branch.node !== null && pathname === nodeHref(branch.node)) ||
+    branch.children.some(containsCurrent)
+  );
+}
+---
+
+<ul class:list={['reference-route-tree', { 'reference-route-tree-compact': compact, 'reference-route-tree-nested': nested }]}>
+  {branches.map((branch) => (
+    <li class="reference-route-branch">
+      {branch.children.length > 0 ? (
+        <details open={containsCurrent(branch)}>
+          <summary>{branch.segment}</summary>
+          {branch.node && branch.showOverview && (
+            <a
+              class="reference-route-overview"
+              href={nodeHref(branch.node)}
+              aria-label={`Open ${branch.route}`}
+              aria-current={pathname === nodeHref(branch.node) ? 'page' : undefined}
+            >Overview</a>
+          )}
+          <Astro.self branches={branch.children} pathname={pathname} compact={compact} nested />
+        </details>
+      ) : branch.node ? (
+        <a
+          href={nodeHref(branch.node)}
+          aria-label={branch.route === branch.segment ? undefined : branch.route}
+          aria-current={pathname === nodeHref(branch.node) ? 'page' : undefined}
+        >{branch.segment}</a>
+      ) : (
+        <span>{branch.segment}</span>
+      )}
+    </li>
+  ))}
+</ul>
