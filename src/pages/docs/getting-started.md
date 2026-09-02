@@ -66,8 +66,8 @@ different frontend can enter through the plugin boundary while preserving its
 own language rules.
 
 This is the first example of implementation serving the graph without becoming
-its semantic foundation. The Design discussion of [replaceable bootstrap
-implementations](/docs/design/the-self-hosting-horizon/#bootstrap-implementations-are-replaceable)
+its semantic foundation. The design discussion of [replaceable bootstrap
+implementations](/docs/Design/the-self-hosting-horizon/#bootstrap-implementations-are-replaceable)
 follows that idea into self-hosting.
 
 Every source Dialect hosted by Workspace remains a real semantic owner rather
@@ -139,7 +139,7 @@ foundation that lets independently designed languages participate without
 adopting one canonical syntax or semantic model. A plugin-provided Dialect may
 reuse this lexicon, extend it, or bring a different frontend. The distinction is
 the same one used when [C and other languages raise their own
-meaning](/docs/design/meaning-crosses-languages/#c-and-other-languages-raise-their-own-meaning)
+meaning](/docs/Design/meaning-crosses-languages/#c-and-other-languages-raise-their-own-meaning)
 while keeping their own language rules.
 
 Even among the built-in Dialects, shared spelling does not imply shared
@@ -149,7 +149,7 @@ semantics. The Dialect that accepts a form still owns what that form means.
 
 Consecutive `//` lines are not discarded after parsing. They become
 documentation attached to the source or definition that follows, which lets
-hover, generated references, Packages, and other tools ask the real semantic
+hover, generated references, packages, and other tools ask the real semantic
 owner for authored prose.
 
 ```ttx
@@ -308,7 +308,7 @@ public run : func = [] -> [] {
 }
 ```
 
-The two `package(...)` expressions refer to standard semantic Packages by
+The two `package(...)` expressions refer to standard semantic packages by
 coordinate. `Perimortem.Memory` supplies owned byte storage, while
 `Perimortem.System` supplies the terminal API. They do not select native
 libraries. The Build Environment later supplies providers for the current host.
@@ -517,7 +517,7 @@ not require a second Puffer or language server.
 - [Puffer](/puffer/) explains why one source selects the complete command
 - [Core concepts](/docs/core-concepts/) introduces the ownership vocabulary used
   across the platform
-- [Design](/docs/design/) derives the model from the original toolchain problem
+- [design](/docs/Design/) derives the model from the original toolchain problem
 - [API reference](/docs/reference/) shows generated semantic identities and
   their relationships
 - [Development](/docs/development/) maps the repositories and contribution

@@ -15,7 +15,7 @@ less precise model.
 ## What becomes possible
 
 A Tetrodotoxin toolchain gives each domain its own **Dialect** and semantic
-objects. Those objects participate in one **Workspace**, where Packages,
+objects. Those objects participate in one **Workspace**, where packages,
 cross-language references, editor navigation, diagnostics, and compilation can
 reach the same identities.
 
@@ -44,12 +44,13 @@ introduces Dialects, TTX, the Workspace, and Terminals in context.
 
 ### Study the design
 
-[Design Background](/docs/design/) explains the tooling history and constraints
-that produced Tetrodotoxin. It then develops nine concepts across forty
+[design Background](/docs/Design/) explains the tooling history and constraints
+that produced Tetrodotoxin. It then develops ten concepts across fifty
 numbered steps: semantic ownership, factual uncertainty, opaque projections,
-emergent behavior, generative graphs, shared tooling, live evolution, semantic
-federation, and self-hosting. It is the long path for readers who want to reason
-through the examples and tradeoffs behind the architecture.
+emergent behavior, derived type systems, generative graphs, shared tooling,
+live evolution, semantic federation, and self-hosting. It is the long path for
+readers who want to reason through the examples and tradeoffs behind the
+architecture.
 
 ### See the bundled languages
 

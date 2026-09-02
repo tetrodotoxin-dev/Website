@@ -3,23 +3,23 @@ layout: ../../../layouts/DesignLayout.astro
 title: Shared tooling
 description: Puffer, editor features, and independent compilers become ordinary observers of one semantic graph instead of owners of parallel models.
 steps:
-  - number: "25"
+  - number: "35"
     title: Puffer hosts the graph
     id: puffer-hosts-the-graph
-  - number: "26"
+  - number: "36"
     title: One identity, one editor path
     id: one-identity-one-editor-path
-  - number: "27"
+  - number: "37"
     title: Hover without a language switch
     id: hover-without-a-language-switch
-  - number: "28"
+  - number: "38"
     title: Compile into independent Terminals
     id: compile-into-independent-terminals
 ---
 
 The graph now preserves current facts, partial structure, and machinery capable
 of generating future meaning. None of that matters to a developer if hover,
-navigation, compilation, and Packages still build private models beside it.
+navigation, compilation, and packages still build private models beside it.
 
 This chapter follows one graph identity from source into editor tools and
 independent products, then defines the deliberately small role Puffer plays in
@@ -139,14 +139,14 @@ The next question appears as soon as the developer edits the source. Can those
 tools keep working without rebuilding one linked world or invalidating every
 observation already returned?
 
-### What this enables
+### Key takeaways
 
 - One source identity supports hover, definition, completion, Graph Text,
   Package projection, and independent compilation
 - A new Dialect inherits generic tooling by participating in shared contracts
   rather than adding branches to Puffer
 
-### What goes wrong without it
+### Common pitfalls to avoid
 
 - The editor creates another symbol graph
 - The compiler creates another dependency graph

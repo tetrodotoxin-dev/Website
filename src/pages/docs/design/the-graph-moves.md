@@ -3,17 +3,17 @@ layout: ../../../layouts/DesignLayout.astro
 title: Live evolution
 description: Live source replacement changes one authority while partial tooling, impact analysis, and immutable Package neighbors continue to use the surrounding graph.
 steps:
-  - number: "29"
+  - number: "39"
     title: Live source replacement changes one authority
     id: live-source-replacement-changes-one-authority
-  - number: "30"
+  - number: "40"
     title: Partial tooling remains useful during edits
     id: partial-tooling-remains-useful-during-edits
-  - number: "31"
+  - number: "41"
     title: Rename and impact follow identity
     id: rename-and-impact-follow-identity
-  - number: "32"
-    title: Packages are immutable neighbors
+  - number: "42"
+    title: packages are immutable neighbors
     id: packages-are-immutable-neighbors
 ---
 
@@ -92,7 +92,7 @@ A graph-aware rename can:
 - report Package or generated projections that cannot be edited in place.
 
 Impact analysis follows the same edges. If a Layout changes, consumers can ask
-which Callables, Interface negotiations, Packages, or Terminals currently reach
+which Callables, Interface negotiations, packages, or Terminals currently reach
 that identity. The analysis does not need a separate dependency database whose
 keys must be synchronized with compiler nodes.
 
@@ -110,7 +110,7 @@ The same foundation supports broader questions without adding registries:
 These are consequences of identity and live queries. They are not separate
 indexes that become authoritative beside the graph.
 
-## Packages are immutable neighbors
+## packages are immutable neighbors
 
 A restored Package graph participates beside live source rather than beneath a
 special metadata API. Its identities are fresh in the current Workspace, but
@@ -139,14 +139,14 @@ The graph can now move within one language ecosystem. The next question asks
 whether the same identity and projection model can cross language boundaries
 without turning either language into the other.
 
-### What this enables
+### Key takeaways
 
 - Editors can consume partial replacement graphs immediately
 - References naturally observe new source answers
-- Unrelated source graphs, immutable Packages, and prior Pack and Layout
+- Unrelated source graphs, immutable packages, and prior Pack and Layout
   snapshots remain valid
 
-### What goes wrong without it
+### Common pitfalls to avoid
 
 - A global linked program requires invalidation whenever one source changes
 - Dependencies require an imposed processing order

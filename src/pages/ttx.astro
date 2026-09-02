@@ -138,7 +138,7 @@ const roles = [
               {
                 kind: 'content',
                 eyebrow: 'TTX semantic contracts',
-                title: 'Identity · Concepts · Type · Pack · Layout',
+                title: 'Identity · Concepts · Domain · Pack · Layout',
               },
               {
                 kind: 'content',
@@ -301,12 +301,14 @@ const roles = [
             reconstruction, LLVM compilation, and the final executable. No
             consumer receives a copied declaration.
           </p>
-          <a class="button button-primary" href="/docs/getting-started/">
-            Getting Started
-          </a>
-          <a class="button button-secondary" href={SITE.ttxExamples}>
-            Browse the canonical sources
-          </a>
+          <div class="button-row actions-end">
+            <a class="button button-primary" href="/docs/getting-started/">
+              Getting Started
+            </a>
+            <a class="button button-secondary" href={SITE.ttxExamples}>
+              See the source
+            </a>
+          </div>
         </div>
         <pre class="ttx-code" aria-label="Echo Library source"><code><span data-token="keyword">dialect</span> <span data-token="accessor">:</span> <span data-token="type">Library</span><span data-token="punctuation">;</span>
 
@@ -343,9 +345,11 @@ const roles = [
             done, App reveals Home again. Menus, editors, games, and tools can
             all grow from the same small pattern.
           </p>
-          <a class="button button-secondary" href={SITE.appGuide}>
-            Explore the App guide
-          </a>
+          <div class="button-row actions-end">
+            <a class="button button-secondary" href={SITE.appGuide}>
+              Explore the App guide
+            </a>
+          </div>
         </div>
         <pre class="ttx-code" aria-label="Multiple Scenes App source"><code><span data-token="comment">// Chooses how people move between Home and Settings.</span>
 <span data-token="keyword">dialect</span> <span data-token="accessor">:</span> <span data-token="type">App</span><span data-token="punctuation">;</span>
@@ -372,9 +376,11 @@ const roles = [
             to know whether App will reveal Home, open something else, or exit.
             That choice stays open wherever the Scene is used.
           </p>
-          <a class="button button-secondary" href={SITE.sceneGuide}>
-            Explore the Scene guide
-          </a>
+          <div class="button-row actions-end">
+            <a class="button button-secondary" href={SITE.sceneGuide}>
+              Explore the Scene guide
+            </a>
+          </div>
         </div>
         <pre class="ttx-code" aria-label="Settings Scene source"><code><span data-token="comment">// Closes this Scene when Escape is pressed.</span>
 <span data-token="keyword">dialect</span> <span data-token="accessor">:</span> <span data-token="type">Scene</span><span data-token="punctuation">;</span>

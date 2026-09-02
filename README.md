@@ -62,7 +62,7 @@ nodes and cycles.
 - *src/layouts/* owns the shared site and documentation shells.
 - *src/components/* owns the header and footer.
 - *src/data/site.ts* owns navigation and external project links.
-- *src/pages/docs/design/* and *src/layouts/DesignLayout.astro* own the
+- *src/pages/docs/Design/* and *src/layouts/DesignLayout.astro* own the
   first-principles narrative about meaning, graphs, and representation.
 - *src/data/reference.ts* owns the generated reference presentation contract.
 - *scripts/sync-reference.mjs* parses graph-text files or stdin into the generic

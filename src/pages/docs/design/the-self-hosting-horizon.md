@@ -1,18 +1,18 @@
 ---
 layout: ../../../layouts/DesignLayout.astro
 title: Self-hosting
-description: TTX describes its own contracts as semantic machinery, Packages that machinery, and treats every bootstrap as one replaceable implementation of the same observations.
+description: TTX describes its own contracts as semantic machinery, packages that machinery, and treats every bootstrap as one replaceable implementation of the same observations.
 steps:
-  - number: "37"
+  - number: "47"
     title: TTX describes its own concepts
     id: ttx-describes-its-own-concepts
-  - number: "38"
+  - number: "48"
     title: Package preserves graph-generating machinery
     id: package-preserves-graph-generating-machinery
-  - number: "39"
+  - number: "49"
     title: Bootstrap implementations are replaceable
     id: bootstrap-implementations-are-replaceable
-  - number: "40"
+  - number: "50"
     title: The toolchain is made from the meaning it hosts
     id: the-toolchain-is-made-from-the-meaning-it-hosts
 ---
@@ -135,7 +135,7 @@ other language frontends <──raise and project──────┘
 Puffer coordinates bootstrap and invocation while editor tooling observes exact
 graph identities, live source authorities replace their answers without
 rebuilding unrelated graphs, and independent Terminals project Graph Text,
-bindings, compiler inputs, Packages, libraries, and executables. Other frontends
+bindings, compiler inputs, packages, libraries, and executables. Other frontends
 raise their own meaning into the same conversation instead of first becoming
 Library or TTX source.
 
@@ -150,17 +150,17 @@ preserved meaning, they form a semantic federation. When the federation hosts
 the machinery that defines its own contracts, self-hosting is no longer a
 special compiler milestone. It is another instance of semantic participation.
 
-That is the complete Design argument: the common layer is meaning, not
+That is the complete design argument: the common layer is meaning, not
 representation.
 
-### What this enables
+### Key takeaways
 
 - TTX-authored and native owners can satisfy the same contracts
-- Packages preserve the generators needed to construct another semantic host
+- packages preserve the generators needed to construct another semantic host
 - The C ABI remains one replaceable projection rather than the definition of
   meaning
 
-### What goes wrong without it
+### Common pitfalls to avoid
 
 - Bootstrap classes become the real semantic authority
 - Compiler registries and native type identities define participation

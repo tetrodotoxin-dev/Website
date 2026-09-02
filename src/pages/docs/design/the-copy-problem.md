@@ -33,11 +33,11 @@ semantic identity without constructing a universal language model.
 
 Start with `color`. Several systems need facts about it:
 
-- the parser records its spelling and source location
-- the editor wants documentation, hover information, and a definition target
-- the compiler needs its type, operations, and value flow
-- a Package needs enough durable meaning to reconstruct it without source
-- a runtime may eventually need a physical carrier for its values.
+- The parser records its spelling and source location
+- The editor wants documentation, hover information, and a definition target
+- The compiler needs its type, operations, and value flow
+- A Package needs enough durable meaning to reconstruct it without source
+- A runtime may eventually need a physical carrier for its values
 
 Each system has a legitimate reason to avoid depending on another system's
 private representation. An editor should not need compiler heap objects, and a
@@ -95,8 +95,8 @@ This does not require one universal object containing every possible field. The
 owner still speaks its own domain. Shared contracts rise only when independent
 systems genuinely ask the same question.
 
-A type reached through a local name, a Package Reference, a Generic
-materialization, and a direct declaration does not acquire four parents or four
+An identity reached through a local name, an imported dependency, a generated
+specialization, and a direct declaration does not acquire four parents or four
 copies. Those paths converge on the current semantic owner.
 
 ## Concepts are questions
@@ -107,6 +107,11 @@ table?
 TTX calls the common semantic identity an **Abstract**. An Abstract supplies a
 small stable foundation and answers open-ended named **concepts**. A concept is
 a question asked of the real owner, not a field reserved in a universal node.
+
+Every Abstract answers `resolve()` with the identity it currently represents.
+Ordinary owners represent themselves. Keeping that total operation separate
+from concept lookup later lets a transparent relationship share one referent
+without turning the relationship into another public category.
 
 `resolve_concept(name)` sends one borrowed binary name to one exact Abstract.
 The receiver decides whether it understands that question and returns another
@@ -124,7 +129,7 @@ table because it can ask a name.
 This open query surface matters when the answer does not yet exist. A
 conventional resolver may return null, throw, or allocate a placeholder record
 for a later phase to repair. TTX can return a real provisional answer while the
-owner continues to expose its name, documentation, source Association, and
+owner continues to expose its name, documentation, source relationship, and
 other established relationships.
 
 ## Concepts are not limited to readable names
@@ -163,13 +168,13 @@ cannot rely on future implementations preserving that interpretation.
 
 Why does the example look structured at all? Package chooses to recognize the
 `$[...]` convention, interpret the enclosed bytes relative to the requesting
-source, and return the resource identity it
-owns. That is one valid interpretation of the complete request, not structure
+source, and return the resource identity it owns. That is one valid
+interpretation of the complete request, not structure
 exposed by the concept system. Another Abstract may recognize the same byte
-sequence without splitting it at all. An owner that can prove completed absence
-may return None without decoding the apparent path, while an unsettled answer
-may remain Unknown. Nothing about the spelling requires a parameter parser, a
-partially resolved route, or a second global resource registry.
+sequence without splitting it at all. An owner may prove that no answer exists
+without decoding the apparent path, or leave the answer indeterminate while its
+facts remain unsettled. Nothing about the spelling requires a parameter parser,
+a partially resolved route, or a second global resource registry.
 
 Readable names remain valuable because people can document them and independent
 systems are less likely to choose the same spelling accidentally. Readability
@@ -218,21 +223,26 @@ participate.
 TTX instead keeps the requirement and candidate as two real Abstracts. An
 identity-free **Interface** negotiates the relationship between them:
 
-```text
-rendering requirement + candidate function
-                    ↓
-          Interface negotiation
-                    ↓
-Unknown · Rejected · Satisfied · Equivalent
-```
+$$
+\begin{gathered}
+\text{rendering requirement}
+\mathrel{\texttt{ + }}
+\text{candidate function} \\
+\Downarrow\;\text{Interface negotiation}\;\Downarrow \\
+\text{Indeterminate}\;\cdot\;\text{Rejected}\;\cdot\;
+\text{Satisfied}\;\cdot\;\text{Equivalent}
+\end{gathered}
+$$
 
 `Satisfied` is directional: the candidate meets this requirement. `Equivalent`
 is stronger and requires the concrete negotiator to prove the relationship in
-both directions. An unsettled relation remains Unknown rather than becoming a
-premature rejection.
+both directions. An unsettled relation remains indeterminate rather than
+becoming a premature rejection. The next chapter derives the shared answer TTX
+uses to preserve that state.
 
-The result is deliberately non-binding. Negotiation creates no Alias, wrapper,
-common type, registry entry, or semantic dependency between the participants.
+The result is deliberately non-binding. Negotiation creates no forwarding
+identity, wrapper, common type, registry entry, or semantic dependency between
+the participants.
 It does not attach the candidate to the requirement or retain a relation object
 for later queries. It reports what the current facts establish, and a later
 observation negotiates again.
@@ -242,17 +252,11 @@ identity-free view containing the exact candidate and the operations that
 witness one required category. The view is evidence about the candidate, not a
 cast to another semantic object.
 
-Consider an `Addressable` whose exact type is known. It can satisfy the TTX
-`Type` requirement by providing operations that forward Layout questions to
-that type while preserving the `Addressable` as the candidate identity. A
-consumer that needs the actual type follows the total type edge. It never casts
-the `Addressable` pointer into a type object or selects a substitute identity.
-
-The bundled rendering languages use this separation directly. A Pipeline stage
-provides the requirement, while a Library function remains the candidate owned
-by its language. Their Interface may consider value Layouts, stage policy, and
-resource relationships without copying either declaration or requiring both
-Dialects to inherit one native class.
+Rendering provides a direct example. One language can own the stage requirement
+while a function remains the candidate owned by another language. Their
+Interface may consider value flow, stage policy, and resource relationships
+without copying either declaration or requiring both languages to inherit one
+native class.
 
 <details class="documentation-insert">
   <summary>
@@ -260,15 +264,53 @@ Dialects to inherit one native class.
     <strong>Interface evidence is not subtyping</strong>
   </summary>
   <div class="documentation-insert-content">
-    <p>It is tempting to read a satisfied Interface as the judgment <code>candidate &lt;: requirement</code>. TTX introduces no such subtype relation. Satisfaction does not coerce the candidate, make it implicitly substitutable in every context, or establish transitive relationships with other requirements.</p>
-    <p>After one category requirement is satisfied, category proof may expose an identity-free witness view:</p>
-    <pre><code>category_proof(requirement, candidate)
-  → identity   = candidate
-    operations = witness(requirement, candidate)</code></pre>
-    <p>This resembles an existential package or type-class dictionary: the consumer receives the exact candidate beside the operations witnessing one contract. The witness may be synthesized from other semantic facts, so pointer convertibility and native inheritance are neither required nor implied.</p>
-    <p>The comparison to <a href="https://learn.microsoft.com/en-us/windows/win32/com/rules-for-implementing-queryinterface">COM interface discovery</a> is useful but limited. COM returns another interface pointer, fixes an object's supported interface set, and couples discovery to reference counting. TTX borrows the original candidate, negotiates one current semantic relation, and leaves lifetime with the graph owner.</p>
-    <p><a href="https://doc.rust-lang.org/reference/types/trait-object.html">Rust trait objects</a> likewise pair a value pointer with a virtual method table, but that carrier exists to provide runtime erasure and dispatch. A TTX witness view is evidence only. Erasure requires a separate explicit language value, and satisfying an Interface alone allocates nothing.</p>
-    <p><a href="https://mlir.llvm.org/docs/Interfaces/">MLIR interfaces</a> share the goal of letting consumers ask capabilities without switching over every Dialect. Their generated C++ models, casts, and context registration remain part of one compiler representation. TTX instead negotiates exact semantic requirement identities through its C ABI without making a registry or host class hierarchy authoritative.</p>
+
+It is tempting to read a satisfied Interface as the judgment
+`candidate <: requirement`. TTX introduces no such subtype relation.
+Satisfaction does not coerce the candidate, make it implicitly substitutable
+in every context, or establish transitive relationships with other
+requirements.
+
+After one category requirement is satisfied, category proof may expose an
+identity-free witness view:
+
+$$
+\operatorname{category\_proof}(R,X)
+= \left(X,\operatorname{witness}(R,X)\right)
+$$
+
+Projecting the identity component recovers the original candidate:
+
+$$
+\pi_{\mathrm{identity}}
+\left(\operatorname{category\_proof}(R,X)\right)=X
+$$
+
+This resembles an existential package or type-class dictionary: the consumer
+receives the exact candidate beside the operations witnessing one contract.
+The witness may be synthesized from other semantic facts, so pointer
+convertibility and native inheritance are neither required nor implied.
+
+The comparison to [COM interface
+discovery](https://learn.microsoft.com/en-us/windows/win32/com/rules-for-implementing-queryinterface)
+is useful but limited. COM returns another interface pointer, fixes an object's
+supported interface set, and couples discovery to reference counting. TTX
+borrows the original candidate, negotiates one current semantic relation, and
+leaves lifetime with the graph owner.
+
+[Rust trait objects](https://doc.rust-lang.org/reference/types/trait-object.html)
+likewise pair a value pointer with a virtual method table, but that carrier
+exists to provide runtime erasure and dispatch. A TTX witness view is evidence
+only. Erasure requires a separate explicit language value, and satisfying an
+Interface alone allocates nothing.
+
+[MLIR interfaces](https://mlir.llvm.org/docs/Interfaces/) share the goal of
+letting consumers ask capabilities without switching over every concrete owner.
+Their generated C++ models, casts, and context registration remain part of one
+compiler representation. TTX instead negotiates exact semantic requirement
+identities through its C ABI without making a registry or host class hierarchy
+authoritative.
+
   </div>
 </details>
 
@@ -288,7 +330,105 @@ That is where the next chapter begins. Factual uncertainty belongs to the answer
 to one complete question, not to an assumed set of parameters hidden inside its
 name.
 
-### What this enables
+<details class="documentation-insert documentation-insert-advanced">
+  <summary>
+    <span class="documentation-insert-label">Advanced synthesis · optional</span>
+    <strong>Ownership and evidence remain separate</strong>
+  </summary>
+  <div class="documentation-insert-content">
+
+<blockquote>
+  <p><strong>“Tetrodotoxin was developed from first principles. Each part of the design began with concrete constraints and was built by construction, allowing the larger semantics to emerge from their composition. The formalization below is my working derivation of that structure, informed by several years of tangential exposure to theory while building in this space. If you can strengthen one of these derivations or connect it to established work, please <a href="https://github.com/tetrodotoxin-dev/Tetrodotoxin/issues">open a design issue</a>. Substantial revisions can grow into a public RFC. None of the notation is required to understand or use Tetrodotoxin.”</strong></p>
+  <footer>— Matt</footer>
+</blockquote>
+
+**One owned subject.** Let `𝒜` contain the exact Abstract identities and `𝔹*`
+the finite byte sequences, including the empty sequence. For one observation
+`ω`, every Abstract supplies a total represented-identity operation and one
+receiver-local concept operation:
+
+$$
+\begin{aligned}
+\operatorname{resolve}_{\omega}
+  &: \mathcal{A} \to \mathcal{A} \\
+\operatorname{concept}_{\omega}
+  &: \mathcal{A} \times \mathbb{B}^{*} \to \mathcal{A}
+\end{aligned}
+$$
+
+The first argument to `concept` supplies the namespace. Two owners may interpret
+the same bytes differently without colliding because neither spelling creates a
+global route. The complete byte sequence remains one atomic question regardless
+of whether one receiver chooses to decode structure from it.
+
+Chaining readable syntax applies the operation repeatedly rather than creating
+one flattened key:
+
+$$
+X_0 = X,
+\qquad
+X_{k+1}
+  = \operatorname{concept}_{\omega}(X_k,b_k)
+$$
+
+Each answer therefore becomes the real receiver of the next question. No route
+object, universal member table, or consumer-owned copy stands between the
+consumer and the current semantic owner.
+
+**A relation without a binding.** Let `R` be one exact requirement Abstract and
+`X` one exact candidate Abstract. Interface negotiation reports the evidence
+available for that ordered pair:
+
+$$
+\operatorname{negotiate}_{\omega}(R,X)
+\in
+\left\{
+u,\;
+\operatorname{Rejected},\;
+\operatorname{Satisfied},\;
+\operatorname{Equivalent}
+\right\}
+$$
+
+Here `u` names the indeterminate answer whose semantics the next chapter
+develops. Satisfied proves the direction from requirement to candidate, while
+Equivalent records the stronger proof established by the concrete negotiator.
+No general subtype, symmetry, or transitive relation follows from either result.
+
+When a required category is satisfied, its evidence has the form:
+
+$$
+\operatorname{proof}_{\omega}(R,X)
+=
+\left(X,\operatorname{witness}_{\omega}(R,X)\right)
+$$
+
+Write `π_candidate` for the ordinary projection function that selects the
+candidate component from this pair. Applying it recovers the exact identity
+supplied to the negotiation:
+
+$$
+\pi_{\mathrm{candidate}}
+\left(\operatorname{proof}_{\omega}(R,X)\right)
+=X
+$$
+
+The witness contributes only the operations needed for requirement `R`. Because
+proof preserves `X`, negotiation cannot manufacture a wrapper, adjusted semantic
+identity, native cast, or registry entry and then present it as the candidate.
+The requirement also remains an ordinary Abstract rather than a UUID or host
+type token.
+
+This separation closes the ownership argument. Concept resolution keeps every
+question with its current receiver, while Interface negotiation lets another
+system prove a relationship without acquiring either participant. The graph can
+therefore extend its vocabulary and evidence without creating another authority
+that must be synchronized with the semantic owner.
+
+  </div>
+</details>
+
+### Key takeaways
 
 - Hover, navigation, compilation, and Package reconstruction can converge on one
   semantic subject without sharing one consumer-specific representation
@@ -297,7 +437,7 @@ name.
 - Interfaces prove richer relationships without native casts, wrappers, or
   copied declaration models
 
-### What goes wrong without it
+### Common pitfalls to avoid
 
 - Editor symbols, compiler nodes, Package records, and linked dependency objects
   become parallel authorities requiring synchronization, invalidation, and

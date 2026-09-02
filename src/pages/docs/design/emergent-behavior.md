@@ -1,115 +1,133 @@
 ---
 layout: ../../../layouts/DesignLayout.astro
 title: Emergent behavior
-description: Initialization, recursive defaults, and folding emerge from small independent concepts instead of accumulating on one universal type API.
+description: Operational joins, fitting propagation, equality, and folding emerge from layered graph relationships without assuming one universal type system.
 steps:
-  - number: "17"
-    title: Type does not own Initialization
-    id: type-does-not-own-initialization
-  - number: "18"
-    title: Empty-capable values break recursion
-    id: empty-capable-values-break-recursion
   - number: "19"
+    title: Operations join existing facts
+    id: operations-join-existing-facts
+  - number: "20"
+    title: Fitting outcomes propagate
+    id: fitting-outcomes-propagate
+  - number: "21"
+    title: Equality layers a truth result
+    id: equality-layers-a-truth-result
+  - number: "22"
     title: Fold is an ordinary concept
     id: fold-is-an-ordinary-concept
 ---
 
-Imagine implementing a type system for one language. The first type object may
-need only a name and size, but construction soon adds defaults, conversions add
-another policy, and fitting, allocation, constant evaluation, folding, and
-lowering follow because type appears to be the object every operation already
-understands.
+Opaque projections gave us independent producers, repacked flow, and fitting
+answers that preserve Unknown, None, or an admitted Pack. We can now ask how an
+operation combines those facts without inspecting either participant or adding
+another method to a universal object.
 
-The arrangement works until another language gives one operation a different
-meaning or an operation does not belong to type at all. The shared type contract
-then accumulates policies from every consumer and becomes another universal
-language model.
+The answer is a layered **operational join**. The operation retains the exact
+participants and derives only the relationship it owns. It remains a real
+semantic subject that can be queried again when either participant offers a new
+projection.
 
-TTX takes the opposite route. It begins with the Pack and Layout flowing through
-the current query, then asks which semantic owner understands the requested
-behavior. The result is another factual projection rather than a method added to
-every type.
+## Operations join existing facts
 
-## Type does not own Initialization
-
-Consider a declaration that needs a value but has no authored initializer. Its
-type describes the semantic domain and exposes a Layout, but that alone does not
-explain how the language creates a valid value.
-
-Initialization asks a separate question:
-
-> Given this input Pack, what output flow can the receiving concept currently produce?
-
-<div class="diagram inset-shadow diagram-flow diagram-grid rabbit-diagram rabbit-initialization-diagram" role="img" aria-label="A source Pack and an Initialization concept negotiate an output Pack accepted by the receiver">
-  <div class="diagram-panel"><small>Supplied flow</small><strong>Input Pack</strong></div>
-  <span class="diagram-arrow" aria-hidden="true">+</span>
-  <div class="diagram-panel accent-panel"><small>Independent concept</small><strong>Initialization</strong></div>
-  <span class="diagram-arrow" aria-hidden="true">→</span>
-  <div class="diagram-panel accent-panel"><small>Negotiated result</small><strong>Output Pack</strong></div>
-</div>
-
-The output Pack is sufficient evidence. The receiving declaration does not need
-to know whether its producer came from a scalar zero, a field initializer, a
-conversion, a fresh Object allocation, or another Dialect's construction
-policy.
-
-Concrete Library types can all answer Initialization while the host-neutral TTX
-type contract remains free of default and allocation policy. A C type, Shader
-type, or another domain can define a different initialization relationship
-without extending one global switch.
-
-## Empty-capable values break recursion
-
-Opaque Packs first make ordinary composition straightforward. A Structure with
-a Bool and a finite nested Structure asks each declaration for Initialization,
-then composes the returned producers into one Pack. The outer owner does not
-need a special nested-default representation.
-
-Recursion exposes why that opacity matters. Suppose `Node` requires another
-`Node` as an inline value. Initializing the outer value requires another Node,
-which requires another Node. No finite Pack can satisfy the request, so the
-current projection remains Unknown and immutable production waits.
-
-Now place the child behind `Option[Node]`:
+Suppose one operation relates a Target Abstract to a Source Abstract. Each owns
+its own concepts and may expose value flow through a Pack. The operation does
+not copy either participant into an operation-specific node model.
 
 ```text
-Node initialization
-  └─ Option[Node] initialization
-       └─ absent
+Operational join
+├─ Target Abstract
+└─ Source Abstract
 ```
 
-The absent Option produces one complete Pack without initializing Node. The
-same reasoning lets an empty `View[Node]` or `Access[Node]` exist without
-constructing an element.
+The join asks whether the Source flow fits the structure accepted by Target.
+That question is current and directional. The operation keeps both identities
+regardless of the answer, so another observation can ask again without
+invalidating a retained selection.
 
-<div class="grid columns-2 prose-grid">
-  <article class="card data-card"><small>Required child</small><strong>Node → Node → Node</strong><p>Unknown · no finite projection</p></article>
-  <article class="card data-card"><small>Empty-capable child</small><strong>Node → Option[Node] → absent</strong><p>Complete · recursion stops</p></article>
-</div>
+This is the same layering principle introduced by Addressable. The join remains
+interrogable because it owns a real relationship. It may delegate a successful
+semantic question to Target or return Source flow, but it is not a transparent
+Alias and cannot be unwrapped to bypass its admission rule.
 
-No central recursion registry knows that Option is special. The behavior
-emerges because Initialization returns an opaque Pack and the absent state does
-not ask for payload flow. Query-local recursion detection only prevents one
-observation from evaluating forever. It does not mutate the type or cache a
-permanent failure.
+## Fitting outcomes propagate
+
+The fitting answer determines the join's current projection:
+
+```text
+Target.fits(Source)
+  → Unknown      Join remains Unknown
+  → None         Join propagates None
+  → fitted Pack  Join may delegate to Target and expose fitted Source flow
+```
+
+Unknown does not become rejection. None does not fall back to Unknown. A fitted
+Pack does not become proof that Source and Target are the same semantic object.
+Each result preserves exactly the evidence established by fitting.
+
+When a consumer asks for the admitted flow, the join asks the caller's Context
+to retain the fitted Source Layout as another Pack snapshot. The Pack continues
+to identify the actual Source producers. Target contributes admission policy,
+not replacement values.
+
+This is **conditional propagation**. It shares the useful shape of Alias
+forwarding while remaining a layered operation with its own observable
+contract. Initialization can later use this construction to relate requested
+output meaning to supplied flow without making either participant own the
+other.
+
+## Equality layers a truth result
+
+Equality is another operational join. It retains two source flows, negotiates
+whether they belong to one comparable domain, and projects a truth-valued result
+only when that admission succeeds.
+
+```text
+left flow + right flow
+          ↓ comparable
+      Equality
+          ↓
+   truth-valued Pack
+```
+
+Equality does not semantically depend on Initialization. Both operations reuse
+the same pattern: retain exact participants, propagate the fitting outcome, and
+add only the result relationship owned by the operation.
+
+If compatibility remains Unknown, the Equality result remains Unknown. If the
+relationship is rejected with None, Equality propagates None. Once admitted,
+the operation can expose its truth domain without converting either operand
+into that domain.
+
+The producer of the result is Equality itself. The operands remain its exact
+inputs, while the output Pack contains the value produced by this operation.
+That separation lets a formatter retain the authored comparison, an editor
+explain both inputs, and a consumer use the truth result without rebuilding the
+comparison from metadata.
 
 ## Fold is an ordinary concept
 
-Now consider a declaration that requires compile-time data. It receives a
-producer, but should not inspect literals, expressions, Options, aggregates, or
-foreign values to decide whether that producer is immutable.
+Now ask whether one operational result can become immutable evidence. A consumer
+should not inspect literals, expressions, aggregates, or foreign values to
+decide whether their producer is complete.
 
 It asks one ordinary question: `fold`.
 
 1. Query every semantically reached input for `fold`.
-2. Preserve Unknown when an input remains provisional.
-3. Recognize exact None as proven non-foldability.
-4. Continue only after every required answer proves Constant.
-5. Let the concrete domain derive one immutable result.
+2. Negotiate whether each answer proves Constant.
+3. Preserve Unknown when an input remains provisional.
+4. Recognize exact None as proven non-foldability.
+5. Treat another non-Constant answer as unrelated or currently non-folded.
+6. Continue only after every required input proves Constant.
+7. Let the concrete domain derive one immutable result.
 
 A Constant answers its own fold query with itself. Another Dialect can support
-the same protocol without modifying Library fields, the type system, hover, or
-the compiler that consumes the result.
+the same protocol without modifying Equality, hover, or the consumer that asks
+for the result.
+
+For Equality, two current Constant inputs allow the owning domain to emit
+`Constant(True)` or `Constant(False)`. Empty, scalar, named, and multi-value
+domains may instead emit one aggregate Constant representing their complete
+flow. Fold prescribes the evidence boundary, not the value domain.
 
 Before reusing a folded value, the operation requeries its reached inputs and
 compares their exact Constant identities. This is the local form of the
@@ -119,51 +137,40 @@ Folding and constant evaluation are therefore not separate semantic graphs.
 `fold` asks for the immutable projection. Constant evaluation is the proof that
 every fact needed by the current request has reached Constant.
 
-These behaviors have useful precedents. The
-[Hazel project](https://hazel.org/) gives incomplete programs static and dynamic
-meaning rather than treating every unfinished editor state as meaningless.
-[Abstract interpretation](https://www.di.ens.fr/~cousot/COUSOTpapers/POPL77.shtml)
-formalizes useful approximations of program behavior. TTX shares the insistence
-that partial information can remain meaningful, but it does not force every
-concept into one global lattice or one universal approximation relation.
+<details class="documentation-insert">
+  <summary>
+    <span class="documentation-insert-label">Technical note</span>
+    <strong>Partial behavior has useful precedents</strong>
+  </summary>
+  <div class="documentation-insert-content">
+    <p><a href="https://hazel.org/papers/hazel-hatra23.pdf">Hazel</a> gives incomplete programs static and dynamic meaning rather than treating every unfinished editor state as meaningless. <a href="https://www.di.ens.fr/~cousot/COUSOTpapers/POPL77.shtml">Abstract interpretation</a> formalizes useful approximations of program behavior.</p>
+    <p>TTX shares the insistence that partial information can remain meaningful, but it does not force every concept into one global lattice or one universal approximation relation. Operational joins propagate the answer supplied by each owner rather than interpreting Unknown, None, and Constant as one universal state machine.</p>
+  </div>
+</details>
 
-What matters here is the composition of the rules:
+Operational joins now explain how behavior can arise from layered relationships
+without assuming a type system. The next chapter applies that construction to
+Types, initialization, optional values, and control flow to show how a concrete
+language can derive a coherent type system without making it part of TTX.
 
-- Alias and Addressable make simple irreversible commitments
-- Slice and Swizzle retain useful partial Layouts
-- Option, View, and Access end recursive Initialization through empty values
-- a required recursive Object remains Unknown because no finite Pack exists
-- a const field proves Constant without learning how construction worked
-- a Generic preserves machinery capable of producing unrequested types
-- Package preserves observable behavior without preserving process identity.
+### Key takeaways
 
-None of those outcomes needs a central kind switch. They emerge because the
-owners answer independent questions through immutable projections. The design
-is successful when adding another Dialect extends those behaviors without
-adding another registry, const interpreter, initialization hierarchy, or
-shadow graph.
+- Operations retain their real participants instead of copying them into a
+  central operation model
+- Unknown, None, and fitted Packs propagate without losing their distinct
+  meanings
+- Equality and folding can extend the graph without inspecting concrete
+  producer kinds
 
-The same pattern now covers defaults, recursive construction, and folding
-without assigning them all to type. The next question is harder: how can the
-graph preserve an operation that produces not only a current fact, but new facts
-in the future?
+### Common pitfalls to avoid
 
-### What this enables
-
-- Different languages can define Initialization and folding without extending a
-  global type hierarchy
-- Empty-capable values terminate recursive defaults while required recursive
-  values remain factually Unknown
-
-### What goes wrong without it
-
-- The type system accumulates construction, conversion, allocation, folding,
-  and lowering policy
+- Operations collapse fitting into Boolean admission
+- Completed rejection is laundered back into Unknown
 - Const evaluation becomes a second interpreter
-- Concrete kind switches decide which declarations participate in behavior that
-  their real owners could have answered directly
+- Concrete kind switches decide which producers participate in behavior their
+  real owners could have answered directly
 
 ### Normative contracts
 
 - [TTX semantics: Open concept negotiation](https://github.com/tetrodotoxin-dev/Tetrodotoxin/blob/tetrodotoxin-1.0/ttx/ttx_semantics.md#open-concept-negotiation)
-- [TTX design: Initialization and emergent behavior](https://github.com/tetrodotoxin-dev/Tetrodotoxin/blob/tetrodotoxin-1.0/ttx/ttx_design.md#initialization-and-emergent-behavior)
+- [TTX semantics: Layout](https://github.com/tetrodotoxin-dev/Tetrodotoxin/blob/tetrodotoxin-1.0/ttx/ttx_semantics.md#layout)

@@ -70,7 +70,7 @@ choose which source meanings can join a Workspace. Selected Terminal producers
 choose which products can leave when the current projection satisfies that
 product's contract.
 
-A new DSL can therefore reuse source lifetime, diagnostics, Packages, editor
+A new DSL can therefore reuse source lifetime, diagnostics, packages, editor
 sessions, cross-language navigation, and existing Terminals without translating
 its model into another language. A new Terminal can consume the strongest graph
 its product admits without adding target policy to every Dialect.
@@ -111,14 +111,14 @@ other's declaration inventory.
 
 The negotiation reports one current relationship without binding the owners,
 manufacturing a wrapper, or requiring a native `is` or `select` cast. The
-[Semantic ownership walkthrough](/docs/design/the-copy-problem/#interfaces-negotiate-without-binding-identities)
+[Semantic ownership walkthrough](/docs/Design/the-copy-problem/#interfaces-negotiate-without-binding-identities)
 derives why that distinction matters for category proof and cross-Dialect
 contracts.
 
 ## Terminals choose representation
 
 A **Terminal** derives one product from the strongest meaning its format admits.
-Native code, SPIR-V, Packages, generated headers, Graph Text, and canonical
+Native code, SPIR-V, packages, generated headers, Graph Text, and canonical
 formatting each belong to the consumer that needs that representation.
 
 This boundary keeps target facts out of the languages that do not own them. The
@@ -144,7 +144,7 @@ A representation placed inside the graph becomes an early Terminal: a dead
 fragment that needs linking, invalidation, or adapters to imitate participation.
 Keeping Terminals at the edge is what prevents shadow graphs.
 
-## Packages preserve semantic machinery
+## packages preserve semantic machinery
 
 A Package reconstructs fresh identities that answer the same promised
 questions as the source graph that produced it. References preserve how a
@@ -158,6 +158,6 @@ live `package.ttx` graph through its Environment-owned Workspace. Invoking
 `package.ttx` directly is the independent request that creates `package.ttxp`
 for distribution or source-free use.
 
-The [Design pages](/docs/design/) derive these behaviors from first principles
+The [design pages](/docs/Design/) derive these behaviors from first principles
 and follow them into live editing, unified language tooling, generated
 bindings, and semantic federation.

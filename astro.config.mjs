@@ -1,5 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 
 // The Website presents source without claiming semantic ownership over it. This
 // grammar recognizes only lexical forms needed to render authored examples; the
@@ -61,6 +64,14 @@ export default defineConfig({
   site: 'https://tetrodotoxin.dev',
   trailingSlash: 'always',
   markdown: {
+    processor: unified({
+      // Display math is opt-in. Disabling single-dollar inline math keeps TTX
+      // concept routes such as `$name` and `$[...]` ordinary authored bytes.
+      remarkPlugins: [[remarkMath, { singleDollarTextMath: false }]],
+      // Native MathML keeps the published DOM semantic and compact. KaTeX
+      // still retains the authored LaTeX in an application/x-tex annotation.
+      rehypePlugins: [[rehypeKatex, { output: 'mathml' }]],
+    }),
     shikiConfig: {
       langs: [tetrodotoxin],
       theme: tetrodotoxinTheme,

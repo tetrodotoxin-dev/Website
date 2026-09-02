@@ -3,16 +3,16 @@ layout: ../../../layouts/DesignLayout.astro
 title: Semantic federation
 description: Semantic projections generate honest bindings while independent frontends raise their own meaning into TTX without adopting one universal source or IR.
 steps:
-  - number: "33"
+  - number: "43"
     title: Generated bindings are semantic projections
     id: generated-bindings-are-semantic-projections
-  - number: "34"
+  - number: "44"
     title: LLVM IR remains one Terminal
     id: llvm-ir-remains-one-terminal
-  - number: "35"
+  - number: "45"
     title: C and other languages raise their own meaning
     id: c-and-other-languages-raise-their-own-meaning
-  - number: "36"
+  - number: "46"
     title: Hover follows identity across languages
     id: hover-follows-identity-across-languages
 ---
@@ -140,13 +140,13 @@ The federation now spans source, process, representation, and language
 boundaries. The final question turns inward: can the definitions and bootstrap
 that make TTX participate obey the same rules?
 
-### What this enables
+### Key takeaways
 
 - Bindings preserve as much meaning as the receiving language can express
 - C and other frontends retain their own semantics while joining shared hover,
   navigation, Package, and Terminal relationships
 
-### What goes wrong without it
+### Common pitfalls to avoid
 
 - Bindings become ABI-only stubs
 - Every language pair needs custom editor integration

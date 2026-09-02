@@ -33,11 +33,12 @@ export const designNavigation = [
   { number: '2', label: 'Factual uncertainty', href: '/docs/design/a-living-graph/' },
   { number: '3', label: 'Opaque projections', href: '/docs/design/layouts-as-firewalls/' },
   { number: '4', label: 'Emergent behavior', href: '/docs/design/emergent-behavior/' },
-  { number: '5', label: 'Generative graphs', href: '/docs/design/the-graph-survives/' },
-  { number: '6', label: 'Shared tooling', href: '/docs/design/the-toolchain-wakes-up/' },
-  { number: '7', label: 'Live evolution', href: '/docs/design/the-graph-moves/' },
-  { number: '8', label: 'Semantic federation', href: '/docs/design/meaning-crosses-languages/' },
-  { number: '9', label: 'Self-hosting', href: '/docs/design/the-self-hosting-horizon/' },
+  { number: '5', label: 'Derived type systems', href: '/docs/design/derived-type-systems/' },
+  { number: '6', label: 'Generative graphs', href: '/docs/design/the-graph-survives/' },
+  { number: '7', label: 'Shared tooling', href: '/docs/design/the-toolchain-wakes-up/' },
+  { number: '8', label: 'Live evolution', href: '/docs/design/the-graph-moves/' },
+  { number: '9', label: 'Semantic federation', href: '/docs/design/meaning-crosses-languages/' },
+  { number: '10', label: 'Self-hosting', href: '/docs/design/the-self-hosting-horizon/' },
 ] as const;
 
 export const docsNavigation = [

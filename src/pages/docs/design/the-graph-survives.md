@@ -3,19 +3,19 @@ layout: ../../../layouts/DesignLayout.astro
 title: Generative graphs
 description: References and Generics preserve graph-generating machinery until a real Terminal or Package boundary asks meaning to leave the live Workspace.
 steps:
-  - number: "20"
+  - number: "30"
     title: Reference preserves the question
     id: reference-preserves-the-question
-  - number: "21"
+  - number: "31"
     title: Generic preserves the generator
     id: generic-preserves-the-generator
-  - number: "22"
+  - number: "32"
     title: Terminals belong at the edge
     id: terminals-belong-at-the-edge
-  - number: "23"
+  - number: "33"
     title: Package reconstructs machinery
     id: package-reconstructs-machinery
-  - number: "24"
+  - number: "34"
     title: A perfect simulacrum passes a behavioral test
     id: a-perfect-simulacrum-passes-a-behavioral-test
 ---
@@ -238,14 +238,14 @@ for distribution or source-free use.
 The graph can now survive source and process boundaries. The remaining concepts
 show editors, builds, other languages, and TTX itself using that living result.
 
-### What this enables
+### Key takeaways
 
 - References continue resolving after live source replacement
 - Generics can materialize types that publication never observed
-- Packages can reconstruct a source-free graph that remains useful to the same
+- packages can reconstruct a source-free graph that remains useful to the same
   semantic tools
 
-### What goes wrong without it
+### Common pitfalls to avoid
 
 - Selected types, serialized routes, materialization inventories, linked
   dependencies, and compiler nodes become internal Terminals
